@@ -8,10 +8,16 @@ const userrouter = {
     name: 'user',
     meta: {title: '会员', icon: 'product'},
     children: [{
+      path: 'adminlist',
+      name: 'adminlist',
+      component: () => import('@/views/user/adminlist'),
+      meta: {title: '管理员列表', icon: 'product-list'}
+    },
+    {
       path: 'userlist',
       name: 'userlist',
       component: () => import('@/views/user/userlist'),
-      meta: {title: '会员列表', icon: 'product-list'}
+      meta: {title: '会员员列表', icon: 'product-list'}
     },
     //   {
     //     path: 'addProduct',

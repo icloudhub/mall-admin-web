@@ -44,7 +44,7 @@
           label="昵称"
           align="center">
           <template slot-scope="scope">
-            <span>{{scope.row.nickName}}</span>
+            <span>{{scope.row.nickname}}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -58,36 +58,67 @@
          <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item label="会员头像">
+            <el-form-item label="会员头像:">
               <span>
                 <img style="height: 40px" :src="props.row.icon"/>
-                <!-- {{ props.row.icon }} -->
               </span>
             </el-form-item>
-            <el-form-item label="邮箱">
+            <el-form-item label="邮箱:">
               <span>{{ props.row.email }}</span>
             </el-form-item>
-            <el-form-item label="邀请码">
+            <el-form-item label="邀请码:">
               <span>{{ props.row.reccode }}</span>
             </el-form-item>
-            <el-form-item label="被邀请人">
+            <el-form-item label="被邀请人:">
               <span>{{ props.row.recid }}</span>
             </el-form-item>
-            <el-form-item label="深度">
+            <el-form-item label="深度:">
               <span>{{ props.row.depth }}</span>
             </el-form-item>
-            <el-form-item label="实名状态">
+            <el-form-item label="实名状态:">
               <span>{{ props.row.depth }}</span>
             </el-form-item>
-            <el-form-item label="用户ID">
+            <el-form-item label="用户ID:">
               <span>{{ props.row.id }}</span>
             </el-form-item>
-            <el-form-item label="注册时间">
+            <el-form-item label="注册时间:">
               <span>{{ props.row.createTime }}</span>
             </el-form-item>
-            <el-form-item label="状态">
+            <el-form-item label="状态:">
               <span>{{ props.row.status }}</span>
             </el-form-item>
+            <el-form-item label="性别:">
+              <span>{{ props.row.gender }}</span>
+            </el-form-item>
+            <el-form-item label="生日:">
+              <span>{{ props.row.birthday }}</span>
+            </el-form-item>
+            <el-form-item label="城市:">
+              <span>{{ props.row.city }}</span>
+            </el-form-item>
+            <el-form-item label="职业:">
+              <span>{{ props.row.job }}</span>
+            </el-form-item>
+            <el-form-item label="个性签名:">
+              <span>{{ props.row.personalized_signature }}</span>
+            </el-form-item>
+            <el-form-item label="用户来源:">
+              <span>{{ props.row.source_type }}</span>
+            </el-form-item>
+            <el-form-item label="积分:">
+              <span>{{ props.row.integration }}</span>
+            </el-form-item>
+            <el-form-item label="成长值:">
+              <span>{{ props.row.growth }}</span>
+            </el-form-item>
+            <el-form-item label="剩余抽奖次数:">
+              <span>{{ props.row.luckey_count }}</span>
+            </el-form-item>
+            <el-form-item label="历史积分数量:">
+              <span>{{ props.row.history_integration }}</span>
+            </el-form-item>
+       
+            
           </el-form>
         </template>
       </el-table-column>
@@ -109,23 +140,12 @@
 </template>
 
 <script>
-import {userlist} from '@/api/user';
+import {memberlist} from '@/api/user';
 export default {
     data(){
         return{
                 searchdata: {
-                    search: "",
-                    group: [
-                    {
-                        value: "1001",
-                        label: "管理员"
-                    },
-                    {
-                        value: "1002",
-                        label: "用户"
-                    }
-                    ],
-                    groupval: "1002"
+                    search: ""
                 },
                 list:null,
                 total:0
@@ -148,9 +168,13 @@ export default {
             this.searchdata.pageNum = 1;
             this.getList();
         },
+        handleResetSearch(){
+            this.searchdata.search = null
+            this.getList();
+        },
         getList(){
             this.listLoading = true;
-            userlist(this.searchdata.search,10,1).then(response => {
+            memberlist(this.searchdata.search,10,this.searchdata.pageNum).then(response => {
             this.listLoading = false;
             this.list = response.data.list;
             this.total = response.data.total;
