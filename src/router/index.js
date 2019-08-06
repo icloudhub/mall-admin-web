@@ -5,7 +5,7 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '../views/layout/Layout'
-
+import userrouter from './user'
 /**
  * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
  * alwaysShow: true               if set true, will always show the root menu, whatever its child routes length
@@ -32,10 +32,10 @@ export const constantRouterMap = [
       meta: {title: '首页', icon: 'home'}
     }]
   },
+  userrouter,
   {
     path: '/pms',
     component: Layout,
-    redirect: '/pms/product',
     name: 'pms',
     meta: {title: '商品', icon: 'product'},
     children: [{
