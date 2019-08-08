@@ -27,3 +27,65 @@ export function memberlist(name,pageSize,pageNum) {
   })
 }
 
+/**
+ * 获取所有权限列表
+ */
+export function permissionlist(name,pageSize,pageNum) {
+  return request({
+    url:'/permission/treeList',
+    method:'get',
+    params:null
+  })
+}
+
+/**
+ * 获取所有角色
+ */
+export function rolelist() {
+  return request({
+    url:'/role/list',
+    method:'get',
+    params:null
+  })
+}
+
+/**
+  * 获取指定用户的角色
+ */
+export function adminrole(id) {
+  return request({
+    url:'/admin/role/'+id,
+    method:'get',
+    params:null
+  })
+}
+/**
+  * 修改指定用户的角色
+ */
+export function adminroleUpdate(adminid,rokeids) {
+
+  return request({
+    url:'/admin/role/update/',
+    method:'POST',
+    data:{
+      adminId:adminid,
+      roleIds:rokeids
+    }
+  })
+}
+
+/**
+ * 获取用户所有权限（包括+-权限）
+  */
+export function adminpermission(id) {
+  return request({
+    url:'/admin/permission/'+id,
+    method:'get',
+    params:null
+  })
+}
+
+
+
+
+

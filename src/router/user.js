@@ -19,12 +19,19 @@ const userrouter = {
       component: () => import('@/views/user/userlist'),
       meta: {title: '会员员列表', icon: 'product-list'}
     },
-    //   {
-    //     path: 'addProduct',
-    //     name: 'addProduct',
-    //     component: () => import('@/views/pms/product/add'),
-    //     meta: {title: '添加商品', icon: 'product-add'}
-    //   }
+      {
+        path: 'permission',
+        name: 'permission',
+        component: () => import('@/views/user/permission'),
+        meta: {title: '权限列表', icon: 'product-add'}
+      },
+      {
+        path: 'rolelist',
+        name: 'rolelist',
+        component: () => import('@/views/user/rolelist'),
+        meta: {title: '角色列表', icon: 'product-add'}
+      }
+      
     ]
   }
 
