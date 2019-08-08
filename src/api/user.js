@@ -62,11 +62,11 @@ export function adminrole(id) {
 /**
   * 修改指定用户的角色
  */
-export function adminroleUpdate(adminid,rokeids) {
 
+export function adminroleUpdate(adminid,rokeids) {
   return request({
-    url:'/admin/role/update/',
-    method:'POST',
+    url:'/admin/role/update',
+    method:'post',
     data:{
       adminId:adminid,
       roleIds:rokeids

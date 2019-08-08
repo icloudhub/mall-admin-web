@@ -99,7 +99,7 @@ export default {
     },
      adminroledelete(row){
 
-      adminroleUpdate(this.adminid, -row.id).then(response => {
+      adminroleUpdate(this.adminid, row.id).then(response => {
         this.listLoading = false;
         this.getList();
       });
