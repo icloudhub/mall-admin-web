@@ -4,7 +4,10 @@
       角色
       <el-button type="primary" icon="el-icon-plus" circle @click="dialogVisible = true"></el-button>
     </h3>
-    <el-table ref="productTable" :data="list" v-loading="listLoading" border>
+    <el-table ref="productTable" 
+        :data="list"
+        v-loading="listLoading" 
+        border>
       <el-table-column label="id" align="center">
         <template slot-scope="scope">
           <span>{{scope.row.id}}</span>
@@ -57,11 +60,11 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog title="收货地址" :visible.sync="dialogVisible">
-      <AdminaddRole :dialogVisible="dialogVisible"></AdminaddRole>
+    <el-dialog title="批量修改角色" :visible.sync="dialogVisible">
+      <AdminaddRole ref="adminaddRole" :hasrole="list" :adminid="adminid"></AdminaddRole>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="updatarole">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -79,6 +82,7 @@ export default {
     return {
       listLoading: false,
       list: null,
+      
       dialogVisible: false
     };
   },
@@ -91,18 +95,40 @@ export default {
   methods: {
     getList() {
       this.listLoading = true;
-     
       adminrole(this.adminid).then(response => {
         this.listLoading = false;
         this.list = response.data;
       });
     },
-     adminroledelete(row){
-
-      adminroleUpdate(this.adminid, row.id).then(response => {
+   
+    adminroledelete(row){
+        this.listLoading = true;
+        
+        var roleids = [];
+        this.list.forEach(element => {
+            if(element.id != row.id){
+                roleids.push(element.id) 
+            }
+        });
+        adminroleUpdate(this.adminid, roleids.join(',')).then(response => {
+            this.listLoading = false;
+            this.getList();
+        });
+    },
+    updatarole(){
+      
+        var selectarr = this.$refs.adminaddRole.multipleSelection;
+        var roleids = [];
+        selectarr.forEach(element => {
+           roleids.push(element.id) 
+        });
+        this.listLoading = true;
+        adminroleUpdate(this.adminid, roleids.join(',')).then(response => {
         this.listLoading = false;
+        this.dialogVisible = false;
         this.getList();
       });
+        
     }
   }
 };

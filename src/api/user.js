@@ -62,15 +62,20 @@ export function adminrole(id) {
 /**
   * 修改指定用户的角色
  */
-
 export function adminroleUpdate(adminid,rokeids) {
+  let data = new FormData();
+  let params = {
+    adminId:adminid,
+    roleIds:rokeids
+  } 
+  Object.keys(params).forEach((key) => {
+    data.append(key, params[key]);
+  });
+
   return request({
     url:'/admin/role/update',
     method:'post',
-    data:{
-      adminId:adminid,
-      roleIds:rokeids
-    }
+    data:data
   })
 }
 
@@ -82,6 +87,42 @@ export function adminpermission(id) {
     url:'/admin/permission/'+id,
     method:'get',
     params:null
+  })
+}
+
+/**
+ * /role/create
+  * 添加角色
+ */
+export function rolecreate(data) {
+  return request({
+    url:'/role/create',
+    method:'post',
+    data:data
+  })
+}
+
+/**
+ * POST /role/delete
+  * 批量删除角色
+ */
+export function roledelete(data) {
+  return request({
+    url:'/role/delete?ids='+data,
+    method:'post',
+    // data:data
+  })
+}
+
+/**
+ * POST /role/update
+  * 修改角色
+ */
+export function roleupdate(id,data) {
+  return request({
+    url:'/role/update/'+id,
+    method:'post',
+    data:data
   })
 }
 
