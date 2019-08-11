@@ -1,119 +1,105 @@
 <template>
-    <div class="app-container">
+  <div class="app-container">
     <el-card class="filter-container" shadow="never">
-
+      <el-button type="primary" icon="el-icon-plus" circle @click="addroledialog"></el-button>
     </el-card>
- 
+    <!-- 列表 -->
     <div class="table-container">
-       
-        <el-table ref="productTable"
-                :data="list"
-                style="width: 100%"
-                row-key="id"
-                :tree-props="{children: 'children', hasChildren: true}"
-                v-loading="listLoading"
-                border>
-
-        <el-table-column label="id">
-            label="id"
-            align="center">
+      <el-table
+        :data="list"
+        style="width: 100%;margin-bottom: 20px;"
+        row-key="id"
+        border
+        default-expand-all
+        :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+      >
+        <el-table-column label="权限名称" align="left">
           <template slot-scope="scope">
-            <span>{{scope.row.id}}</span>
+            <span>{{scope.row.id+":"+scope.row.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column
-          label="名称"
-          align="center">
+        <el-table-column label="icon" align="left" width="40">
           <template slot-scope="scope">
-            <span>{{scope.row.name}}</span>
+            <span>{{scope.row.icon }}</span>
           </template>
         </el-table-column>
-
-        <el-table-column
-          label="uri"
-          align="center">
+        <el-table-column label="权限类型" align="center">
           <template slot-scope="scope">
-            <span>{{scope.row.uri}}</span>
+            <span>{{ gettypestr(scope.row.type) }}</span>
           </template>
         </el-table-column>
-        
-        <el-table-column
-          label="type"
-          align="center">
+        <el-table-column label="前端资源路径" align="center">
           <template slot-scope="scope">
-            <span>{{scope.row.type}}</span>
+            <span>{{scope.row.uri }}</span>
           </template>
         </el-table-column>
 
-         <el-table-column
-          label="icon"
-          align="center">
+        <el-table-column label="权限值" align="center">
           <template slot-scope="scope">
-            <img style="height: 40px" :src="scope.row.icon"/>
+            <span>{{scope.row.value }}</span>
           </template>
         </el-table-column>
-        
-        <el-table-column label="pid">
-            label="id"
-            align="center">
+        <el-table-column label="是否禁用" align="center">
           <template slot-scope="scope">
-            <span>{{scope.row.pid}}</span>
+            <span>
+              <el-switch
+                v-model="scope.row.status"
+                :active-value="1"
+                :inactive-value="0"
+                @change="switchvaluechange(scope.row)"
+              ></el-switch>
+            </span>
           </template>
         </el-table-column>
-        <el-table-column label="status">
-              label="status"
-            align="center">
-          <template slot-scope="scope">
-            <span>{{scope.row.status}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="排序">
-            label="status"
-            align="center">
-          <template slot-scope="scope">
-            <span>{{scope.row.sort}}</span>
-          </template>
-        </el-table-column>
-   
-        <!-- <el-table-column type="expand">
-            <template slot-scope="props">
-            <el-form label-position="left" inline class="demo-table-expand">
-                <el-form-item label="创建时间">
-                    <span>{{ props.row.createTime }}</span>
-                </el-form-item>
-            </el-form>
-            </template>
-      </el-table-column> -->
-    </el-table>
+      </el-table>
     </div>
-    </div>
+    <!-- 添加弹框 -->
+    <el-dialog title="新增权限" :visible.sync="dialogVisible">
+      <Addpermission ref="Addpermission" :editdata="editdata" :options = "list"></Addpermission>
+      <el-button type="primary" @click="onSubmit">确定</el-button>
+      <el-button @click="dialogVisible = false">取消</el-button>
+    </el-dialog>
+
+  </div>
 </template>
 
 <script>
-import {permissionlist} from '@/api/user';
+import { permissionlist } from "@/api/user";
+import Addpermission from "./components/Addpermission";
 export default {
-    data(){
-        return{
-            list:null,
-            breadcrumblist:["全部"]
-        }
+  components:{
+    Addpermission
+  },
+  data() {
+    return {
+      list: [],
+      editdata:{},
+      typedic: { "0": "目录", "1": "菜单", "2": "按钮" },
+      dialogVisible:false,
+    };
+  },
+  created() {
+    this.getList();
+  },
+  methods: {
+    getList() {
+      this.listLoading = true;
+      permissionlist().then(response => {
+        this.listLoading = false;
+        this.list = response.data;
+      });
     },
-    created() {
-        
-      this.getList();
+    switchvaluechange() {},
+    gettypestr(value) {
+      return this.typedic[value];
     },
-    methods:{
-      
-        getList(){
-            
-            this.listLoading = true;
-            permissionlist().then(response => {
-            this.listLoading = false;
-            this.list = response.data;
-            })
-        }
+    addroledialog(){
+      this.dialogVisible = true
+    },
+    onSubmit(){
 
     }
-}
+  }
+};
 </script>
 

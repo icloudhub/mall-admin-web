@@ -109,6 +109,7 @@ export default {
       });
     },
     addroledialog() {
+      this.editrole = {};
       this.dialogVisible = true;
     },
     roledelete(row){
@@ -134,7 +135,7 @@ export default {
      
     },
     rolechange(cell){
-       roleupdate(cell.id, Object.assign({}, cell)).then(response => {
+        roleupdate(cell.id, Object.assign({}, cell)).then(response => {
         this.$message("修改成功");
         this.getList()
       }); 
