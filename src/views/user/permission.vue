@@ -9,7 +9,9 @@
         :data="list"
         style="width: 100%;margin-bottom: 20px;"
         row-key="id"
+        size="mini"
         border
+        stripe
         default-expand-all
         :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
       >
@@ -18,7 +20,7 @@
             <span>{{scope.row.id+":"+scope.row.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="icon" align="left" width="40">
+        <el-table-column label="icon" align="left" width="52">
           <template slot-scope="scope">
             <span>{{scope.row.icon }}</span>
           </template>
@@ -39,7 +41,7 @@
             <span>{{scope.row.value }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="是否禁用" align="center">
+        <el-table-column label="是否禁用" align="center" width="52">
           <template slot-scope="scope">
             <span>
               <el-switch
@@ -54,8 +56,8 @@
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <span>
-              <el-button type="danger" icon="el-icon-delete" circle @click="datadelete(scope.row)"></el-button>
-              <el-button type="primary" icon="el-icon-edit" circle @click="dataedit(scope.row)"></el-button>
+              <el-button type="danger" icon="el-icon-delete" size="mini" circle @click="datadelete(scope.row)"></el-button>
+              <el-button type="primary" icon="el-icon-edit" size="mini" circle @click="dataedit(scope.row)"></el-button>
             </span>
           </template>
         </el-table-column>

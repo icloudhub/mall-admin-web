@@ -1,6 +1,8 @@
 <template>
   <div>
-      <h3>权限</h3>
+      <h3>权限
+        <el-button type="primary" icon="el-icon-plus" circle @click="dialogVisible = true"></el-button>
+      </h3>
         <el-table ref="productTable"
                 :data="list"
                 style="width: 100%"
@@ -76,16 +78,29 @@
             </template>
       </el-table-column>
     </el-table>
+     <el-dialog title="批量修改角色" :visible.sync="dialogVisible">
+      <Adminaddpermission ref="adminaddRole" :hasrole="list" :adminid="adminid"></Adminaddpermission>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" >确 定</el-button>
+      </div>
+    </el-dialog>
+   
   </div>
 </template>
 <script>
 import { adminpermission } from "@/api/user";
+import Adminaddpermission from "./Adminaddpermission"
 export default {
+  components:{
+    Adminaddpermission
+  },
   props: ["adminid"],
   data() {
     return {
       listLoading: false,
-      list: null
+      list: null,
+      dialogVisible:false
     };
   },
   watch: {

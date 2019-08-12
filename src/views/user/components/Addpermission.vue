@@ -71,13 +71,12 @@ export default {
   watch: {
     editdata(val) {
       this.value = this.editdata;
-      alert(JSON.stringify())
       console.log("AddroleFrom赋值：" + JSON.stringify(this.editdata));
     }
   },
   methods: {
     handleChange(){
-      alert(this.editdata.fid);
+  
       alert(this.editdata.fid[this.editdata.fid.length-1]);
     }
   }
