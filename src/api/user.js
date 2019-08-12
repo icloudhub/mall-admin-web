@@ -80,6 +80,17 @@ export function adminroleUpdate(adminid,rokeids) {
 }
 
 /**
+ * 根据id批量删除权限）
+  */
+ export function permissioncreate(data) {
+  return request({
+    url:'/permission/create',
+    method:'post',
+    data:data
+  })
+}
+
+/**
  * 获取用户所有权限（包括+-权限）
   */
 export function adminpermission(id) {
@@ -89,6 +100,33 @@ export function adminpermission(id) {
     params:null
   })
 }
+/**
+ * 根据id批量删除权限）
+  */
+ export function permissiondelete(id) {
+
+  let data = new FormData();
+  data.append("ids", id);
+  return request({
+    url:'/permission/delete/',
+    method:'post',
+    data:data
+  })
+}
+
+/**
+ * 根据id批量删除权限）
+  */
+ export function permissionupdate(id, data) {
+
+  return request({
+    url:'/permission/update/'+id,
+    method:'post',
+    data:data
+  })
+}
+
+
 
 /**
  * /role/create
@@ -119,6 +157,7 @@ export function roledelete(data) {
   * 修改角色
  */
 export function roleupdate(id,data) {
+ 
   return request({
     url:'/role/update/'+id,
     method:'post',

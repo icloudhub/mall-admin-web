@@ -26,7 +26,6 @@ export default {
     },
     watch:{
         editrole(val){
-
           this.value = this.editrole;
           console.log("AddroleFrom赋值："+JSON.stringify(this.editrole));
         }
