@@ -71,9 +71,6 @@
             <el-form-item label="邀请码:">
               <span>{{ props.row.reccode }}</span>
             </el-form-item>
-            <el-form-item label="被邀请人:">
-              <span>{{ props.row.recid }}</span>
-            </el-form-item>
             <el-form-item label="深度:">
               <span>{{ props.row.depth }}</span>
             </el-form-item>
@@ -118,6 +115,20 @@
             </el-form-item>
             <el-form-item label="历史积分数量:">
               <span>{{ props.row.history_integration }}</span>
+            </el-form-item>
+            <el-form-item label="邀请人:">
+              <span v-if="props.row.pid">
+                <el-button size="mini" type="success"> {{ "点击查看【"+props.row.pid +"】"}} </el-button>
+                </span>
+              <span v-else>无</span>
+            </el-form-item>
+            <el-form-item label="其他功能:">
+              <el-button-group>
+              <el-button size="mini" type="success" >查看订单</el-button>
+              <el-button size="mini" type="success" >实名状态</el-button>
+              <el-button size="mini" type="success" >购物车</el-button>
+              <el-button size="mini" type="success" >积分详情</el-button>
+              </el-button-group>
             </el-form-item>
        
             

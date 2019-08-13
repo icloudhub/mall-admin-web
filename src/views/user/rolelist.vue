@@ -91,7 +91,7 @@
      <el-dialog title="批量修改角色" :visible.sync="editPermissonVisible" width="80%">
       <Adminaddpermission ref="RoleaddPer" :roleid="editrole.id"></Adminaddpermission>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button @click="editPermissonVisible = false">取 消</el-button>
         <el-button type="primary" @click="rolepermissionupdate">确 定</el-button>
       </div>
     </el-dialog>
