@@ -1,60 +1,44 @@
 <template>
-    <div class="table-container">
-      <el-table
-        :data="list"
-        style="width: 100%;margin-bottom: 20px;"
-        row-key="id"
-        size="mini"
-        border
-        default-expand-all
-        :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-      >
-        <el-table-column label="权限名称" align="left">
-          <template slot-scope="scope">
-            <span>{{scope.row.id+":"+scope.row.name }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="权限类型" align="center">
-          <template slot-scope="scope">
-            <span>{{ gettypestr(scope.row.type) }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="前端资源路径" align="center">
-          <template slot-scope="scope">
-            <span>{{scope.row.uri }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="权限值" align="center">
-          <template slot-scope="scope">
-            <span>{{scope.row.value }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" align="center">
-          <template slot-scope="scope">
-            <span>
-              <el-button type="danger" icon="el-icon-delete" size="mini" circle @click="datadelete(scope.row)"></el-button>
-              <el-button type="primary" icon="el-icon-plus" size="mini" circle @click="dataedit(scope.row)"></el-button>
-            </span>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div> 
+  <div v-loading="listLoading">
+    <el-cascader-panel
+        v-model="sellectdata"
+        :options="list"
+        :props="{ checkStrictly: true ,
+                  value: 'id',
+                  label: 'name',
+                  multiple: true
+                }"
+        @change="handleChange"
+        size="10%"
+        >
+        </el-cascader-panel>
+  </div>
 </template>
 <script>
+
+import { rolepermission } from "@/api/user";
 import {
   permissionlist,
 } from "@/api/user";
 export default {
+  
+    props: ["roleid"],
+    watch:{
+      roleid(val) {
+        this.roleid = val;
+        this.getroleper(this.roleid)
+      }
+    },
     data() {
         return {
+            listLoading:false,
             list: [],
-            typedic: { "0": "目录", "1": "菜单", "2": "按钮" },
+            sellectdata:[]
         };
     },
     created() {
         this.getList();
+        
     },
     methods: {
         getList() {
@@ -62,11 +46,66 @@ export default {
             permissionlist().then(response => {
                 this.listLoading = false;
                 this.list = response.data;
+                this.getroleper(this.roleid)
             });
         },
         gettypestr(value) {
             return this.typedic[value];
         },
+        handleChange(){
+        
+        },
+        getroleper(roleid){
+          this.listLoading = true;
+          
+          rolepermission(roleid).then(response => {
+                this.listLoading = false;
+                var hasper = response.data;
+                this.sellectdata = [];
+                hasper.forEach(element => {
+                  this.getPathById(element.id,this.list,resule=>{
+                    this.sellectdata.push(resule)
+                  })
+                });
+                console.log(JSON.stringify(this.sellectdata))
+            });
+            
+        },
+        getPathById(id, catalog, callback) {
+ 
+          //定义变量保存当前结果路径
+          var temppath = [];
+          try {
+              function getNodePath(node) {
+                  temppath.push(node.id);
+      
+                  //找到符合条件的节点，通过throw终止掉递归
+                  if (node.id == id) {
+                      throw ("GOT IT!");
+                  }
+                  if (node.children && node.children.length > 0) {
+                      for (var i = 0; i < node.children.length; i++) {
+                          getNodePath(node.children[i]);
+                      }
+      
+                      //当前节点的子节点遍历完依旧没找到，则删除路径中的该节点
+                      temppath.pop();
+                  }
+                  else {
+      
+                      //找到叶子节点时，删除路径当中的该叶子节点
+                      temppath.pop();
+                  }
+              }
+              catalog.forEach(element => {
+                getNodePath(element);
+              });
+              
+          }
+          catch (e) {
+              callback(temppath);
+          }
+        }
     }
 }
 </script>

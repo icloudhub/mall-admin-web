@@ -48,25 +48,33 @@
           </template>
         </el-table-column>
    
-        <el-table-column type="expand">
+        <el-table-column type="expand" >
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
                  <el-form-item label="创建时间">
                 <span>{{props.row.createTime}}</span>
               </el-form-item>
               <el-form-item>
-                <el-button
-                  type="danger"
-                  icon="el-icon-delete"
-                  circle
-                  @click="roledelete(props.row)"
-                ></el-button>
+                <el-button-group >
                 <el-button
                   type="primary"
                   icon="el-icon-edit"
-                  circle
+                  size="mini"
                   @click="roleedit(props.row)"
-                ></el-button>
+                >修改</el-button>
+                <el-button
+                  type="primary"
+                  icon="el-icon-orange"
+                  size="mini"
+                  @click="permissionedit(props.row)"
+                >权限管理</el-button>
+                  <el-button
+                  type="danger"
+                  size="mini"
+                  icon="el-icon-delete"
+                  @click="roledelete(props.row)"
+                  >删除</el-button>
+                </el-button-group>
               </el-form-item>
             </el-form>
           </template>
@@ -75,26 +83,39 @@
     </div>
     <el-dialog title="新增角色" :visible.sync="dialogVisible">
       <AddroleFrom ref="AddroleFrom" :editrole="editrole"></AddroleFrom>
+      <el-button-group>
       <el-button type="primary" @click="onSubmit">确定</el-button>
       <el-button @click="dialogVisible = false">取消</el-button>
+      </el-button-group>
+    </el-dialog>
+     <el-dialog title="批量修改角色" :visible.sync="editPermissonVisible" width="80%">
+      <Adminaddpermission ref="RoleaddPer" :roleid="editrole.id"></Adminaddpermission>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="rolepermissionupdate">确 定</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { rolelist, rolecreate, roledelete, roleupdate } from "@/api/user";
+import { rolelist, rolecreate, roledelete, roleupdate ,rolepermissionupdate} from "@/api/user";
 import AddroleFrom from "./components/AddroleFrom";
+import Adminaddpermission from "./components/Adminaddpermission"
 
 export default {
   components: {
-    AddroleFrom
+    AddroleFrom,
+    Adminaddpermission,
+    
   },
   data() {
     return {
       list:[],
-      editrole : null,
-      listLoading: false,
-      dialogVisible: false
+      editrole : {},
+      listLoading: false,//加载提示框
+      dialogVisible: false,//修改角色弹框
+      editPermissonVisible:false //添加权限弹框
     };
   },
   created() {
@@ -142,7 +163,26 @@ export default {
     },
     roleedit(cell){
         this.editrole = cell;
+        
         this.dialogVisible = true;
+    },
+    permissionedit(cell){
+      this.editrole = cell;
+      this.editPermissonVisible = true;
+    },
+    rolepermissionupdate(){
+      var fromdata = new FormData();
+      let roleid = this.$refs.RoleaddPer.roleid;
+      var permissionIds = []
+      this.$refs.RoleaddPer.sellectdata.forEach(element => {
+        permissionIds.push(element[element.length-1])
+      });
+      let perIds = permissionIds.join(',')
+      fromdata.append("roleId", ''+roleid);
+      fromdata.append("permissionIds", perIds);
+      rolepermissionupdate(fromdata).then(response => {
+        this.editPermissonVisible = false;
+      }); 
     }
   }
 };

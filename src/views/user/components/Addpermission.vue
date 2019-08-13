@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="listLoading"> 
     <el-form ref="form" :model="editdata" label-width="80px" size="mini">
       <el-form-item label="名称">
         <el-input v-model="editdata.name"></el-input>
@@ -54,7 +54,7 @@ export default {
   props: ["editdata","options"],
   data() {
     return {
-
+      listLoading:false,
       typedic:[{
           value: 0,
           label: '目录'
@@ -70,7 +70,7 @@ export default {
   },
   watch: {
     editdata(val) {
-      this.value = this.editdata;
+      this.editdata = val;
       console.log("AddroleFrom赋值：" + JSON.stringify(this.editdata));
     }
   },

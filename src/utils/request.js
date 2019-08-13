@@ -50,7 +50,6 @@ service.interceptors.response.use(
       }
       return Promise.reject('error')
     } else {
-      console.log(response);
       return response.data
     }
   },

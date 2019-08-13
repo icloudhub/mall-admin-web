@@ -164,6 +164,33 @@ export function roleupdate(id,data) {
     data:data
   })
 }
+/**
+ * GET /role/permission/{roleId}
+  * 获取相应角色权限
+ */
+export function rolepermission(id) {
+ 
+  return request({
+    url:'/role/permission/'+id,
+    method:'get',
+  })
+}
+
+/**
+ * post /role/permission/update/
+  * 修改角色
+ */
+export function rolepermissionupdate(data) {
+ 
+  return request({
+    url:'/role/permission/update/',
+    method:'post',
+    data:data
+  })
+}
+
+
+
 
 
 
