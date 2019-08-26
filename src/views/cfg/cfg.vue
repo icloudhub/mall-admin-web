@@ -2,7 +2,22 @@
   <div class="app-container">
     <el-row style="margin:10px">
       <el-col :span="6">
-        <el-card class="filter-container" shadow="never"></el-card>
+        <el-card class="filter-container" shadow="never">
+          <el-button style="float: right;margin: 4px" @click="asstypeVisible=true" size="small">新增</el-button>
+          <el-table
+            ref="productTable"
+            :data="typelist"
+            style="width: 100%"
+            v-loading="listLoading"
+            border
+          >
+          <el-table-column align="center">
+              <template slot-scope="scope">
+                <span>{{scope.row.name +":"+ scope.row.id }}</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-card>
       </el-col>
       <el-col :span="18">
         <el-card class="filter-container" shadow="never">
@@ -89,21 +104,22 @@
       </el-col>
     </el-row>
 
-        <!-- 添加配置资源弹框 -->
-    <el-dialog title="新增权限" :visible.sync="addsoutceVisible">
+    <!-- 添加配置资源弹框 -->
+    <el-dialog title="配置资源" :visible.sync="addsoutceVisible" v-loading="listLoading">
       <Addsoutce ref="Addpermission" :editdata="editsoutcedata"></Addsoutce>
-      <el-button type="primary" @click="onSubmit">确定</el-button>
+      <el-button type="primary" @click="addsoutcesub">确定</el-button>
       <el-button @click="dialogVisible = false">取消</el-button>
     </el-dialog>
-            <!-- 添加配置类型弹框 -->
-    <el-dialog title="新增权限" :visible.sync="asstypeVisible">
-      <Addtype ref="Addpermission" :editdata="edittypedata" ></Addtype>
-      <el-button type="primary" @click="onSubmit">确定</el-button>
+    <!-- 添加配置类型弹框 -->
+    <el-dialog title="配置资源类型" :visible.sync="asstypeVisible" v-loading="listLoading">
+      <Addtype ref="edittypedata" :editdata="edittypedata" ></Addtype>
+      <el-button type="primary" @click="addstypesub">确定</el-button>
       <el-button @click="dialogVisible = false">取消</el-button>
     </el-dialog>
   </div>
 </template>
 <script>
+import { configlistAll ,configcreate} from "@/api/cfg";
 import Addsoutce from "./components/Addsource"
 import Addtype from "./components/Addtype";
 
@@ -124,9 +140,40 @@ export default {
       listLoading:false,
     };
   },
+  created() {
+    this.configlistAll();
+  },
   methods:{
      onSubmit(){
 
+     },
+     configlistAll(){
+      this.listLoading = true;
+      configlistAll().then(response => {
+        this.listLoading = false;
+        this.typelist = response.data;
+      });
+     },
+    //添加配置资源
+     addsoutcesub(){
+       this.listLoading = true;
+       configlistAll().then(response => {
+        this.asstypeVisible = false;
+        this.listLoading = false;
+        this.typelist = response.data;
+      });
+     },
+     //添加类型
+     addstypesub(){
+       this.listLoading = true;
+       configcreate(this.$refs.edittypedata.editdata).then(response => {
+        this.asstypeVisible = false;
+        this.listLoading = false;
+        this.configlistAll()
+      }).catch(() => {
+              this.listLoading = false;
+              this.$message("添加失败");
+            })
      }
   }
 };

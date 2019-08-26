@@ -2,19 +2,19 @@
     <div>
         <el-form label-position="left" inline class="demo-table-expand">
               <el-form-item label="类型">
-                <span>{{ currentRow.id }}</span>
+                <el-input v-model="editdata.id"></el-input> 
               </el-form-item>
               <el-form-item label="标题">
-                <span>{{ currentRow.name }}</span>
+                <el-input v-model="editdata.name"></el-input> 
               </el-form-item>
               <el-form-item label="备注">
-                <span>{{ currentRow.remark }}</span>
+                <el-input v-model="editdata.remark"></el-input> 
               </el-form-item>
         </el-form>
     </div>
 </template>
 <script>
 export default {
-    props: ['typedata']
+    props: ['editdata']
 }
 </script>
