@@ -60,7 +60,7 @@
           >
             <el-table-column label="id" align="center">
               <template slot-scope="scope">
-                <span>{{scope.row.nickname}}</span>
+                <span>{{scope.row.id}}</span>
               </template>
             </el-table-column>
 
@@ -119,7 +119,7 @@
   </div>
 </template>
 <script>
-import { configlistAll ,configcreate} from "@/api/cfg";
+import { configlistAll ,configcreate, getsourcebytype} from "@/api/cfg";
 import Addsoutce from "./components/Addsource"
 import Addtype from "./components/Addtype";
 
@@ -132,7 +132,9 @@ export default {
     return {
       typelist: null,
       sourcelist: null,
-      searchdata: {},
+      searchdata: {typeid:1001,
+      verstion:"string",
+      platform:'0'},
       addsoutceVisible:false,
       asstypeVisible:false,
       edittypedata:{},
@@ -142,6 +144,7 @@ export default {
   },
   created() {
     this.configlistAll();
+    this.getsourcebytype()
   },
   methods:{
      onSubmit(){
@@ -173,6 +176,16 @@ export default {
       }).catch(() => {
               this.listLoading = false;
               this.$message("添加失败");
+            })
+     },
+     getsourcebytype(){
+       this.listLoading = true;
+       getsourcebytype(this.searchdata).then(response => {
+        this.asstypeVisible = false;
+        this.listLoading = false;
+        this.sourcelist = response.data
+      }).catch(() => {
+              this.listLoading = false;
             })
      }
   }

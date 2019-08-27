@@ -13,3 +13,15 @@ export function configcreate(data) {
       data:data
     })
   }
+
+  /**
+   * /config/getsourcebytype
+   * 根据配置分类获取配置资源
+   */
+  export function getsourcebytype(data){
+    return request({
+      url:'/config/getsourcebytype',
+      method:'get',
+      params:data
+    })
+  }
