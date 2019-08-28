@@ -25,3 +25,14 @@ export function configcreate(data) {
       params:data
     })
   }
+  /**
+   *   POST /config/deletetype/{id}
+  删除配置分类
+   */
+
+  export function deletetype(id){
+    return request({
+      url:'/config/deletetype/'+id,
+      method:'POST'
+    })
+  }

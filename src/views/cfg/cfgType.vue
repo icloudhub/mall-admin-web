@@ -41,7 +41,7 @@
                   type="danger"
                   size="mini"
                   icon="el-icon-delete"
-                  @click="roledelete(props.row)"
+                  @click="deleteType(props.row)"
                   >删除</el-button>
                 </el-button-group>
           </el-form>
@@ -58,7 +58,7 @@
     </div>
 </template>
 <script>
-import { configlistAll ,configcreate} from "@/api/cfg";
+import { configlistAll ,configcreate, deletetype} from "@/api/cfg";
 import Addtype from "./components/Addtype";
 export default {
     components: {
@@ -70,6 +70,7 @@ export default {
     data() {
         return {
             typelist: null,
+            listLoading:false,
             asstypeVisible:false,
             edittypedata:{}
         };
@@ -96,6 +97,22 @@ export default {
               this.listLoading = false;
               this.$message("添加失败");
             })
+     },
+     deleteType(data){
+        this.$confirm('删除类型将不能找回，类型相关的资源也将删除，是否确定删除', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+            this.listLoading = true;
+            deletetype(data.id).then(response=>{
+                this.listLoading = false;
+                this.configlistAll()
+            }).catch(err=>{
+                this.listLoading = false;
+                this.$message("删除失败");
+            })
+        })
      },
      typeedit(data){
          this.edittypedata = data;
