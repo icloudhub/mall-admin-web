@@ -12,6 +12,12 @@ const cfgrouter = {
       name: 'appcfg',
       component: () => import('@/views/cfg/cfg'),
       meta: {title: 'app配置', icon: 'product-list'}
+    },{
+      path: 'cfgType',
+      name: 'cfgType',
+      component: () => import('@/views/cfg/cfgType'),
+      meta: {title: 'app配置类型', icon: 'product-list'}
+      
     }
     ]
   }
