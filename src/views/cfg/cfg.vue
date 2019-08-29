@@ -3,11 +3,12 @@
     <el-row style="margin:10px">
       <el-col :span="6">
         <el-card class="filter-container" shadow="never">
-          <el-button style="float: right;margin: 4px" @click="asstypeVisible=true" size="small">新增</el-button>
-          <el-table
-            ref="productTable"
+           <el-table
+            ref="typelistTable"
             :data="typelist"
+            highlight-current-row
             style="width: 100%"
+            @current-change="selectcfgtyperow"
             v-loading="listLoading"
             border
           >
@@ -25,26 +26,23 @@
           <span>筛选搜索</span>
           <el-button
             style="float: right"
-            @click="handleSearchList()"
+            @click="getsourcebytype()"
             type="primary"
             size="small"
           >查询结果</el-button>
           <el-button
             style="float: right;margin-right: 15px"
-            @click="handleResetSearch()"
+            @click="clearseardata()"
             size="small"
           >重置</el-button>
 
           <div style="margin-top: 15px">
             <el-form :inline="true" :model="searchdata" size="small" label-width="140px">
-              <el-form-item label="关键字：">
-                <el-input style="width: 203px" v-model="searchdata.search" placeholder="用户名/手机号"></el-input>
-              </el-form-item>
               <el-form-item label="版本号：">
-                <el-input style="width: 203px" v-model="searchdata.search" placeholder="用户名/手机号"></el-input>
+                <el-input style="width: 203px" v-model="searchdata.verstion" placeholder="用户名/手机号"></el-input>
               </el-form-item>
               <el-form-item label="平台：">
-                <el-input style="width: 203px" v-model="searchdata.search" placeholder="用户名/手机号"></el-input>
+                <el-input style="width: 203px" v-model="searchdata.platform" placeholder="用户名/手机号"></el-input>
               </el-form-item>
             </el-form>
           </div>
@@ -132,12 +130,10 @@ export default {
     return {
       typelist: null,
       sourcelist: null,
-      searchdata: {typeid:1001,
-      verstion:"string",
-      platform:'0'},
+      searchdata: {},
       addsoutceVisible:false,
       asstypeVisible:false,
-      edittypedata:{},
+      edittypedata:null,
       editsoutcedata:{},
       listLoading:false,
     };
@@ -150,11 +146,15 @@ export default {
      onSubmit(){
 
      },
+     clearseardata(){
+       this.searchdata = {};
+     },
      configlistAll(){
       this.listLoading = true;
       configlistAll().then(response => {
         this.listLoading = false;
         this.typelist = response.data;
+        this.$refs.typelistTable.setCurrentRow(response.data[0])
       });
      },
     //添加配置资源
@@ -178,6 +178,7 @@ export default {
               this.$message("添加失败");
             })
      },
+     //根据类型获取对应资源
      getsourcebytype(){
        this.listLoading = true;
        getsourcebytype(this.searchdata).then(response => {
@@ -187,6 +188,11 @@ export default {
       }).catch(() => {
               this.listLoading = false;
             })
+     },
+     selectcfgtyperow(val){
+       this.edittypedata = val
+       this.searchdata.typeid = this.edittypedata.id;
+       this.getsourcebytype()
      }
   }
 };
@@ -198,4 +204,5 @@ export default {
 .el-col {
   border-radius: 4px;
 }
+
 </style>
