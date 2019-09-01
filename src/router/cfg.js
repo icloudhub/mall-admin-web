@@ -17,7 +17,11 @@ const cfgrouter = {
       name: 'cfgType',
       component: () => import('@/views/cfg/cfgType'),
       meta: {title: 'app配置类型', icon: 'product-list'}
-      
+    },{
+      path: 'verlog',
+      name: 'verlog',
+      component: () => import('@/views/cfg/verlog'),
+      meta: {title: '版本上架记录', icon: 'product-list'}
     }
     ]
   }

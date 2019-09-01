@@ -36,3 +36,55 @@ export function configcreate(data) {
       method:'POST'
     })
   }
+
+   /**
+   * POST /CfgVerlog/create
+   * 添加版本
+   */
+  export function cfgVerlogcreate(data){
+    return request({
+      url:'/CfgVerlog/create',
+      method:'POST',
+      data:data
+    })
+  }
+
+     /**
+   * GET /CfgVerlog/listAll
+   * 获取所有版本配置信息
+   */
+  export function cfgVerloglistAll(data){
+    return request({
+      url:'/CfgVerlog/listAll',
+      method:'GET',
+    })
+  }
+
+   /**
+   * POST /CfgVerlog/update/{id}
+   * 更新版本信息
+   */
+  export function cfgVerlogupdate(id,data){
+    return request({
+      url:'/CfgVerlog/update/'+id,
+      method:'POST',
+      data:data
+    })
+  }
+
+
+   /**
+   * POST /CfgVerlog/delete/{id}
+    删除版本记录  
+   */
+  export function cfgVerlogdelete(id){
+    return request({
+      url:'/CfgVerlog/delete/'+id,
+      method:'POST'
+    })
+  }
+  
+
+
+  
+
