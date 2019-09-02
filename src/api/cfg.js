@@ -85,6 +85,32 @@ export function configcreate(data) {
   }
   
 
+   /**
+   * GET /CfgVerlog/listplatform
+    获取所有版本信息平台列表  
+   */
+  export function cfgVerloglistplatform(id){
+    return request({
+      url:'/CfgVerlog/listplatform',
+      method:'GET'
+    })
+  }
+
+   /**
+   * GET /CfgVerlog/listverstion
+   * 获取所有版本信息列表
+   */
+  export function cfgVerloglistverstion(platfrom){
+    return request({
+      url:'/CfgVerlog/listverstion',
+      method:'GET',
+      params:{
+        platfrom:platfrom
+      }
+    })
+  }
+  
+  
 
   
 

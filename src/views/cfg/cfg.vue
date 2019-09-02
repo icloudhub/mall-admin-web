@@ -38,11 +38,30 @@
 
           <div style="margin-top: 15px">
             <el-form :inline="true" :model="searchdata" size="small" label-width="140px">
-              <el-form-item label="版本号：">
-                <el-input style="width: 203px" v-model="searchdata.verstion" placeholder="用户名/手机号"></el-input>
-              </el-form-item>
+             
               <el-form-item label="平台：">
-                <el-input style="width: 203px" v-model="searchdata.platform" placeholder="用户名/手机号"></el-input>
+                <el-select v-model="platform" 
+                @change="getverstionlist"
+                placeholder="请选择平台">
+                <el-option
+                  v-for="item in platformlist"
+                  :key="item.platform"
+                  :label="item.platform"
+                  :value="item.platform">
+                </el-option>
+              </el-select>
+              </el-form-item>
+               <el-form-item label="版本号：">
+                  <el-select
+                    v-model="verstion"
+                    placeholder="请选中版本号">
+                    <el-option
+                      v-for="item in verstionlist"
+                      :key="item.verstion"
+                      :label="item.verstion"
+                      :value="item.verstion">
+                    </el-option>
+                  </el-select>
               </el-form-item>
             </el-form>
           </div>
@@ -117,7 +136,7 @@
   </div>
 </template>
 <script>
-import { configlistAll ,configcreate, getsourcebytype} from "@/api/cfg";
+import { configlistAll ,configcreate, getsourcebytype,cfgVerloglistplatform,cfgVerloglistverstion} from "@/api/cfg";
 import Addsoutce from "./components/Addsource"
 import Addtype from "./components/Addtype";
 
@@ -136,11 +155,17 @@ export default {
       edittypedata:null,
       editsoutcedata:{},
       listLoading:false,
+      platformlist:null,
+      platform:null,
+      verstionlist:null,
+      verstion:null,
+      loading:false
     };
   },
   created() {
     this.configlistAll();
-    this.getsourcebytype()
+    this.getsourcebytype();
+    this.cfgVerloglistplatform();
   },
   methods:{
      onSubmit(){
@@ -193,6 +218,20 @@ export default {
        this.edittypedata = val
        this.searchdata.typeid = this.edittypedata.id;
        this.getsourcebytype()
+     },
+     cfgVerloglistplatform(){
+       cfgVerloglistplatform().then(response => {
+        this.platformlist = response.data
+      }).catch(() => {
+              
+      })
+     },
+     getverstionlist(){
+      cfgVerloglistverstion(this.platform).then(response => {
+        this.verstionlist = response.data
+      }).catch(() => {
+              
+      })
      }
   }
 };
