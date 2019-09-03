@@ -2,13 +2,26 @@ import request from '@/utils/request'
 
 export function configlistAll(params) {
   return request({
-    url:'config/listAll',
+    url:'config/listtype',
     method:'get'
   })
 }
 export function configcreate(data) {
     return request({
-      url:'/config/create',
+      url:'/config/createtype',
+      method:'post',
+      data:data
+    })
+  }
+
+  /**
+   * /config/updatetype/{id}
+   * 修改配置分类
+   * @param {*} data 
+   */
+  export function updatetype(id,data){
+    return request({
+      url:'/config/updatetype/'+id,
       method:'post',
       data:data
     })
@@ -34,6 +47,18 @@ export function configcreate(data) {
     return request({
       url:'/config/deletetype/'+id,
       method:'POST'
+    })
+  }
+
+  /**
+   * POST /config/addsource/{id}
+  给配置分类添加分类资源
+   */
+  export function addsource(id,data){
+    return request({
+      url:'/config/addsource/'+id,
+      method:'POST',
+      data:data
     })
   }
 

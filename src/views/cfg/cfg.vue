@@ -40,7 +40,7 @@
             <el-form :inline="true" :model="searchdata" size="small" label-width="140px">
              
               <el-form-item label="平台：">
-                <el-select v-model="platform" 
+                <el-select v-model="searchdata.platform" 
                 @change="getverstionlist"
                 placeholder="请选择平台">
                 <el-option
@@ -51,23 +51,22 @@
                 </el-option>
               </el-select>
               </el-form-item>
-               <el-form-item label="版本号：">
-                  <el-select
-                    v-model="verstion"
-                    placeholder="请选中版本号">
-                    <el-option
-                      v-for="item in verstionlist"
-                      :key="item.verstion"
-                      :label="item.verstion"
-                      :value="item.verstion">
-                    </el-option>
-                  </el-select>
+               <el-form-item label="版本号：" >
+               <el-select v-model="searchdata.verstion" 
+                placeholder="请选择平台">
+                <el-option
+                  v-for="item in verstionlist"
+                  :key="item.verstion"
+                  :label="item.verstion"
+                  :value="item.verstion">
+                </el-option>
+              </el-select>
               </el-form-item>
             </el-form>
           </div>
         </el-card>
         <el-card>
-          <el-button style="float: right;margin: 8px" @click="addsoutceVisible=true" size="small">新增</el-button>
+          <el-button style="float: right;margin: 8px" @click="addsoutce" size="small">新增</el-button>
           <el-table
             ref="productTable"
             :data="sourcelist"
@@ -116,6 +115,26 @@
                 <span>{{scope.row.remark}}</span>
               </template>
             </el-table-column>
+            <el-table-column align="center" label="操作" >
+          <template slot-scope="props">
+            <el-form label-position="left" inline class="demo-table-expand">
+              <el-button-group>
+                <el-button
+                  type="primary"
+                  icon="el-icon-edit"
+                  size="mini"
+                  @click="sourceedit(props.row)"
+                >修改</el-button>
+                <el-button
+                  type="danger"
+                  size="mini"
+                  icon="el-icon-delete"
+                  @click="deleteverlog(props.row)"
+                >删除</el-button>
+              </el-button-group>
+            </el-form>
+          </template>
+        </el-table-column>
           </el-table>
         </el-card>
       </el-col>
@@ -123,20 +142,14 @@
 
     <!-- 添加配置资源弹框 -->
     <el-dialog title="配置资源" :visible.sync="addsoutceVisible" v-loading="listLoading">
-      <Addsoutce ref="Addpermission" :editdata="editsoutcedata"></Addsoutce>
+      <Addsoutce ref="editsoutcedata" :editdata="editsoutcedata"></Addsoutce>
       <el-button type="primary" @click="addsoutcesub">确定</el-button>
-      <el-button @click="dialogVisible = false">取消</el-button>
-    </el-dialog>
-    <!-- 添加配置类型弹框 -->
-    <el-dialog title="配置资源类型" :visible.sync="asstypeVisible" v-loading="listLoading">
-      <Addtype ref="edittypedata" :editdata="edittypedata" ></Addtype>
-      <el-button type="primary" @click="addstypesub">确定</el-button>
       <el-button @click="dialogVisible = false">取消</el-button>
     </el-dialog>
   </div>
 </template>
 <script>
-import { configlistAll ,configcreate, getsourcebytype,cfgVerloglistplatform,cfgVerloglistverstion} from "@/api/cfg";
+import { configlistAll ,configcreate, addsource, getsourcebytype,cfgVerloglistplatform,cfgVerloglistverstion} from "@/api/cfg";
 import Addsoutce from "./components/Addsource"
 import Addtype from "./components/Addtype";
 
@@ -149,22 +162,23 @@ export default {
     return {
       typelist: null,
       sourcelist: null,
-      searchdata: {},
+      searchdata: {
+        typeid:null,
+        verstion:null,
+        platform:null
+      },
       addsoutceVisible:false,
       asstypeVisible:false,
       edittypedata:null,
       editsoutcedata:{},
       listLoading:false,
       platformlist:null,
-      platform:null,
       verstionlist:null,
-      verstion:null,
       loading:false
     };
   },
   created() {
     this.configlistAll();
-    this.getsourcebytype();
     this.cfgVerloglistplatform();
   },
   methods:{
@@ -172,7 +186,21 @@ export default {
 
      },
      clearseardata(){
-       this.searchdata = {};
+       this.searchdata.verstion = null;
+       this.searchdata.platform = null;
+       this.getsourcebytype();
+     },
+    selectcfgtyperow(val){
+       this.edittypedata = val
+       this.searchdata.typeid = this.edittypedata.id;
+       this.getsourcebytype();
+     },
+     addsoutce(){
+       this.addsoutceVisible = true;
+     },
+     sourceedit(data){
+       this.edittypedata = data
+       this.addsoutceVisible = true;
      },
      configlistAll(){
       this.listLoading = true;
@@ -185,24 +213,16 @@ export default {
     //添加配置资源
      addsoutcesub(){
        this.listLoading = true;
-       configlistAll().then(response => {
-        this.asstypeVisible = false;
+       var data = this.$refs.editsoutcedata.editdata;
+       addsource(this.searchdata.typeid,data).then(response => {
+        this.addsoutceVisible = false;
         this.listLoading = false;
-        this.typelist = response.data;
-      });
-     },
-     //添加类型
-     addstypesub(){
-       this.listLoading = true;
-       configcreate(this.$refs.edittypedata.editdata).then(response => {
-        this.asstypeVisible = false;
-        this.listLoading = false;
-        this.configlistAll()
+        this.getsourcebytype()
       }).catch(() => {
-              this.listLoading = false;
-              this.$message("添加失败");
-            })
+        this.listLoading = false;
+      })
      },
+
      //根据类型获取对应资源
      getsourcebytype(){
        this.listLoading = true;
@@ -214,24 +234,25 @@ export default {
               this.listLoading = false;
             })
      },
-     selectcfgtyperow(val){
-       this.edittypedata = val
-       this.searchdata.typeid = this.edittypedata.id;
-       this.getsourcebytype()
-     },
+  
      cfgVerloglistplatform(){
+       
        cfgVerloglistplatform().then(response => {
         this.platformlist = response.data
+        this.getverstionlist()
       }).catch(() => {
               
       })
      },
      getverstionlist(){
-      cfgVerloglistverstion(this.platform).then(response => {
-        this.verstionlist = response.data
-      }).catch(() => {
-              
-      })
+        this.verstionlist = null
+        this.searchdata.verstion = null;
+        cfgVerloglistverstion(this.searchdata.platform).then(response => {
+          this.verstionlist = response.data;
+          getsourcebytype()
+        }).catch(() => {
+                
+        })
      }
   }
 };

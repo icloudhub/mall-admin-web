@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-card class="filter-container" shadow="never">
-          <el-button style="float: right;margin: 4px" @click="asstypeVisible=true" size="small">新增</el-button>
+          <el-button style="float: right;margin: 4px" @click="showtypeVisible" size="small">新增</el-button>
           <el-table
             ref="productTable"
             :data="typelist"
@@ -9,7 +9,7 @@
             v-loading="listLoading"
             border
           >
-          <el-table-column align="center">
+            <el-table-column align="center">
               <template slot-scope="scope">
                 <span>{{ scope.row.id }}</span>
               </template>
@@ -58,7 +58,7 @@
     </div>
 </template>
 <script>
-import { configlistAll ,configcreate, deletetype} from "@/api/cfg";
+import { configlistAll ,configcreate, deletetype,updatetype} from "@/api/cfg";
 import Addtype from "./components/Addtype";
 export default {
     components: {
@@ -76,6 +76,10 @@ export default {
         };
     },
     methods:{
+    showtypeVisible(){
+      this.edittypedata = {};
+      this.asstypeVisible = true;
+    },
      onSubmit(){
 
      },
@@ -88,15 +92,31 @@ export default {
      },
          //添加类型
      addstypesub(){
+       if(this.$refs.edittypedata.editdata.id){
+         this.updatetypesub();
+         return;
+       }else{
+          this.listLoading = true;
+          configcreate(this.$refs.edittypedata.data).then(response => {
+            this.asstypeVisible = false;
+            this.listLoading = false;
+            this.configlistAll()
+          }).catch(() => {
+              this.listLoading = false;
+              this.$message("添加失败");
+          })
+       }
+     },
+     updatetypesub(){
        this.listLoading = true;
-       configcreate(this.$refs.edittypedata.editdata).then(response => {
+       updatetype(this.$refs.edittypedata.data.id,this.$refs.edittypedata.editdata).then(response => {
         this.asstypeVisible = false;
         this.listLoading = false;
         this.configlistAll()
       }).catch(() => {
-              this.listLoading = false;
-              this.$message("添加失败");
-            })
+          this.listLoading = false;
+          this.$message("添加失败");
+      })
      },
      deleteType(data){
         this.$confirm('删除类型将不能找回，类型相关的资源也将删除，是否确定删除', '提示', {
