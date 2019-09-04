@@ -3,7 +3,7 @@
     <el-row style="margin:10px">
       <el-col :span="6">
         <el-card class="filter-container" shadow="never">
-           <el-table
+          <el-table
             ref="typelistTable"
             :data="typelist"
             highlight-current-row
@@ -12,7 +12,7 @@
             v-loading="listLoading"
             border
           >
-          <el-table-column align="center">
+            <el-table-column align="center">
               <template slot-scope="scope">
                 <span>{{scope.row.name +":"+ scope.row.id }}</span>
               </template>
@@ -38,29 +38,29 @@
 
           <div style="margin-top: 15px">
             <el-form :inline="true" :model="searchdata" size="small" label-width="140px">
-             
               <el-form-item label="平台：">
-                <el-select v-model="searchdata.platform" 
-                @change="getverstionlist"
-                placeholder="请选择平台">
-                <el-option
-                  v-for="item in platformlist"
-                  :key="item.platform"
-                  :label="item.platform"
-                  :value="item.platform">
-                </el-option>
-              </el-select>
+                <el-select
+                  v-model="searchdata.platform"
+                  @change="getverstionlist"
+                  placeholder="请选择平台"
+                >
+                  <el-option
+                    v-for="item in platformlist"
+                    :key="item.platform"
+                    :label="item.platform"
+                    :value="item.platform"
+                  ></el-option>
+                </el-select>
               </el-form-item>
-               <el-form-item label="版本号：" >
-               <el-select v-model="searchdata.verstion" 
-                placeholder="请选择平台">
-                <el-option
-                  v-for="item in verstionlist"
-                  :key="item.verstion"
-                  :label="item.verstion"
-                  :value="item.verstion">
-                </el-option>
-              </el-select>
+              <el-form-item label="版本号：">
+                <el-select v-model="searchdata.verstion" placeholder="请选择平台">
+                  <el-option
+                    v-for="item in verstionlist"
+                    :key="item.verstion"
+                    :label="item.verstion"
+                    :value="item.verstion"
+                  ></el-option>
+                </el-select>
               </el-form-item>
             </el-form>
           </div>
@@ -115,26 +115,26 @@
                 <span>{{scope.row.remark}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" label="操作" >
-          <template slot-scope="props">
-            <el-form label-position="left" inline class="demo-table-expand">
-              <el-button-group>
-                <el-button
-                  type="primary"
-                  icon="el-icon-edit"
-                  size="mini"
-                  @click="sourceedit(props.row)"
-                >修改</el-button>
-                <el-button
-                  type="danger"
-                  size="mini"
-                  icon="el-icon-delete"
-                  @click="deleteverlog(props.row)"
-                >删除</el-button>
-              </el-button-group>
-            </el-form>
-          </template>
-        </el-table-column>
+            <el-table-column align="center" label="操作">
+              <template slot-scope="props">
+                <el-form label-position="left" inline class="demo-table-expand">
+                  <el-button-group>
+                    <el-button
+                      type="primary"
+                      icon="el-icon-edit"
+                      size="mini"
+                      @click="sourceedit(props.row)"
+                    >修改</el-button>
+                    <el-button
+                      type="danger"
+                      size="mini"
+                      icon="el-icon-delete"
+                      @click="deletesource(props.row)"
+                    >删除</el-button>
+                  </el-button-group>
+                </el-form>
+              </template>
+            </el-table-column>
           </el-table>
         </el-card>
       </el-col>
@@ -149,7 +149,11 @@
   </div>
 </template>
 <script>
-import { configlistAll ,configcreate, addsource, getsourcebytype,cfgVerloglistplatform,cfgVerloglistverstion} from "@/api/cfg";
+import { configlistAll ,configcreate, 
+addsource, getsourcebytype,
+deletesource,updatesource,
+cfgVerloglistplatform,cfgVerloglistverstion
+} from "@/api/cfg";
 import Addsoutce from "./components/Addsource"
 import Addtype from "./components/Addtype";
 
@@ -196,10 +200,11 @@ export default {
        this.getsourcebytype();
      },
      addsoutce(){
+       this.editsoutcedata = {}
        this.addsoutceVisible = true;
      },
      sourceedit(data){
-       this.edittypedata = data
+       this.editsoutcedata = data
        this.addsoutceVisible = true;
      },
      configlistAll(){
@@ -214,13 +219,24 @@ export default {
      addsoutcesub(){
        this.listLoading = true;
        var data = this.$refs.editsoutcedata.editdata;
-       addsource(this.searchdata.typeid,data).then(response => {
-        this.addsoutceVisible = false;
-        this.listLoading = false;
-        this.getsourcebytype()
-      }).catch(() => {
-        this.listLoading = false;
-      })
+       if(data.id){
+          updatesource(data.id,data).then(response => {
+          this.addsoutceVisible = false;
+          this.listLoading = false;
+          this.getsourcebytype()
+        }).catch(() => {
+          this.listLoading = false;
+        })
+       }else{
+         addsource(this.searchdata.typeid,data).then(response => {
+          this.addsoutceVisible = false;
+          this.listLoading = false;
+          this.getsourcebytype()
+        }).catch(() => {
+          this.listLoading = false;
+        })
+       }
+       
      },
 
      //根据类型获取对应资源
@@ -253,6 +269,21 @@ export default {
         }).catch(() => {
                 
         })
+     },
+     deletesource(data){
+       this.$confirm('删除资源后将不能找回，是否确定删除', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => { 
+            this.listLoading = true;
+            deletesource(data.id).then(response => {
+              this.listLoading = false;
+              this.getsourcebytype()
+            }).catch(() => {
+                    this.listLoading = false;
+            })
+        })
      }
   }
 };
@@ -264,5 +295,4 @@ export default {
 .el-col {
   border-radius: 4px;
 }
-
 </style>

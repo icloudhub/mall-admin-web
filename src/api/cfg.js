@@ -51,16 +51,40 @@ export function configcreate(data) {
   }
 
   /**
-   * POST /config/addsource/{id}
+   * POST /config/createsource/{typeid}
   给配置分类添加分类资源
    */
-  export function addsource(id,data){
+  export function addsource(typeid,data){
     return request({
-      url:'/config/addsource/'+id,
+      url:'/config/createsource/'+typeid,
       method:'POST',
       data:data
     })
   }
+  /**
+   * /config/deletesource/{id}
+   * 删除配置资源
+   * @param {*} data 
+   */
+  export function deletesource(id){
+    return request({
+      url:'/config/deletesource/'+id,
+      method:'POST'
+    })
+  }
+ /**
+   *   POST /config/updatesource/{id}
+   * 更新配置资源
+   * @param {*} data 
+   */
+  export function updatesource(id,data){
+    return request({
+      url:'/config/updatesource/'+id,
+      method:'POST',
+      data:data
+    })
+  }
+
 
    /**
    * POST /CfgVerlog/create
