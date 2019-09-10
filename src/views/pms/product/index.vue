@@ -84,11 +84,11 @@
                 v-loading="listLoading"
                 border>
         <el-table-column type="selection" width="60" align="center"></el-table-column>
-        <el-table-column label="编号" width="100" align="center">
+        <el-table-column label="编号" width="44" align="center">
           <template slot-scope="scope">{{scope.row.id}}</template>
         </el-table-column>
         <el-table-column label="商品图片" width="120" align="center">
-          <template slot-scope="scope"><img style="height: 80px" :src="scope.row.pic"></template>
+          <template slot-scope="scope"><img style="height: 60px" :src="scope.row.pic"></template>
         </el-table-column>
         <el-table-column label="商品名称" align="center">
           <template slot-scope="scope">
@@ -247,6 +247,14 @@
             <el-input v-model="scope.row.price"></el-input>
           </template>
         </el-table-column>
+         <el-table-column
+            label="市场价格"
+            width="80"
+            align="center">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.originalPrice"></el-input>
+            </template>
+          </el-table-column>
         <el-table-column
           label="商品库存"
           width="80"

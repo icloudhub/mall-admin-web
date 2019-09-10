@@ -56,6 +56,14 @@
             </template>
           </el-table-column>
           <el-table-column
+            label="市场价格"
+            width="80"
+            align="center">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.originalPrice"></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column
             label="商品库存"
             width="80"
             align="center">
