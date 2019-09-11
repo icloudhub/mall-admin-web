@@ -22,6 +22,11 @@ const cfgrouter = {
       name: 'verlog',
       component: () => import('@/views/cfg/verlog'),
       meta: {title: '版本上架记录', icon: 'el-icon-trophy'}
+    },{
+      path: 'cfgservice',
+      name: 'cfgservice',
+      component: () => import('@/views/cfg/cfgservice'),
+      meta: {title: '服务器配置', icon: 'el-icon-trophy'}
     }
     ]
   }
