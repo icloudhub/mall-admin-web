@@ -82,7 +82,9 @@
 
             <el-table-column label="图标" align="center">
               <template slot-scope="scope">
-                <span>{{scope.row.icon}}</span>
+              <span>
+                <img style="height: 40px" :src="scope.row.icon"/>
+              </span>
               </template>
             </el-table-column>
 
@@ -144,7 +146,7 @@
     <el-dialog title="配置资源" :visible.sync="addsoutceVisible" v-loading="listLoading">
       <Addsoutce ref="editsoutcedata" :editdata="editsoutcedata"></Addsoutce>
       <el-button type="primary" @click="addsoutcesub">确定</el-button>
-      <el-button @click="dialogVisible = false">取消</el-button>
+      <el-button @click="addsoutceVisible = false">取消</el-button>
     </el-dialog>
   </div>
 </template>

@@ -15,7 +15,7 @@
       </el-form-item>
       <el-form-item label="商品规格：">
         <el-card shadow="never" class="cardBg">
-          <div v-for="(productAttr,idx) in selectProductAttr">
+          <div v-for=" (productAttr,idx) in selectProductAttr ">
             {{productAttr.name}}：
             <el-checkbox-group v-if="productAttr.handAddStatus===0" v-model="selectProductAttr[idx].values">
               <el-checkbox v-for="item in getInputListArr(productAttr.inputList)" :label="item" :key="item"
@@ -24,7 +24,7 @@
             <div v-else>
               <el-checkbox-group v-model="selectProductAttr[idx].values">
                 <div v-for="(item,index) in selectProductAttr[idx].options" style="display: inline-block"
-                     class="littleMarginLeft">
+                     class="littleMarginLeft" >
                   <el-checkbox :label="item" :key="item"></el-checkbox>
                   <el-button type="text" class="littleMarginLeft" @click="handleRemoveProductAttrValue(idx,index)">删除
                   </el-button>

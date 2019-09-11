@@ -37,15 +37,17 @@
                   </el-select>
               </el-form-item>
               <el-form-item label="icon">
-                  <el-input v-model="editdata.icon"></el-input> 
+                  <scoped-upload v-model="editdata.icon"></scoped-upload> 
               </el-form-item>
         </el-form>
     </div>
 </template>
 <script>
 import {cfgVerloglistplatform,cfgVerloglistverstion} from "@/api/cfg";
+import ScopedUpload from '@/components/Upload/scopedUpload'
 export default {
     props: ['editdata'],
+    components:{ScopedUpload},
     created() {
         this.cfgVerloglistplatform();
     },

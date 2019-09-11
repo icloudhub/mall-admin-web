@@ -31,7 +31,7 @@ export const constantRouterMap = [
       path: 'home',
       name: 'home',
       component: () => import('@/views/home/index'),
-      meta: {title: '首页', icon: 'home'}
+      meta: {title: '首页', icon: 'el-icon-house'}
     }]
   },
   userrouter,
@@ -40,31 +40,31 @@ export const constantRouterMap = [
     path: '/pms',
     component: Layout,
     name: 'pms',
-    meta: {title: '商品', icon: 'product'},
+    meta: {title: '商品', icon: 'el-icon-shopping-cart-full'},
     children: [{
       path: 'product',
       name: 'product',
       component: () => import('@/views/pms/product/index'),
-      meta: {title: '商品列表', icon: 'product-list'}
+      meta: {title: '商品列表', icon: 'el-icon-sell'}
     },
       {
         path: 'addProduct',
         name: 'addProduct',
         component: () => import('@/views/pms/product/add'),
-        meta: {title: '添加商品', icon: 'product-add'}
+        meta: {title: '添加商品', icon: 'el-icon-sell'}
       },
       {
         path: 'updateProduct',
         name: 'updateProduct',
         component: () => import('@/views/pms/product/update'),
-        meta: {title: '修改商品', icon: 'product-add'},
+        meta: {title: '修改商品', icon: 'el-icon-shopping-bag-1'},
         hidden: true
       },
       {
         path: 'productRecycle',
         name: 'productRecycle',
         component: () => import('@/views/pms/product/index'),
-        meta: {title: '商品回收站', icon: 'product-recycle'},
+        meta: {title: '商品回收站', icon: 'el-icon-shopping-bag-2'},
         hidden: true
       },
       {

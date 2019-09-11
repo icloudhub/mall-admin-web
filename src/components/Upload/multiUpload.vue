@@ -9,7 +9,7 @@
       :on-remove="handleRemove"
       :on-success="handleUploadSuccess"
       :on-preview="handlePreview"
-      :limit="maxCount"
+      :limit="1"
       :on-exceed="handleExceed"
     >
       <i class="el-icon-plus"></i>
