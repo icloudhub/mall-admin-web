@@ -1,7 +1,7 @@
 <template>
  <div>
         <el-card class="filter-container" shadow="never">
-          <el-button style="float: right;margin: 4px" @click="asstypeVisible=true" size="small">新增</el-button>
+          
           <el-table
             ref="productTable"
             :data="typelist"
@@ -9,21 +9,21 @@
             v-loading="listLoading"
             border
           >
-          <el-table-column align="center">
+          <el-table-column align="center" label="标签">
               <template slot-scope="scope">
                 <span>{{ scope.row.id }}</span>
               </template>
             </el-table-column>
 
-              <el-table-column align="center">
+              <el-table-column align="center" label="设置值">
               <template slot-scope="scope">
-                <span>{{scope.row.name  }}</span>
+                <span v-if="scope.row.maybe">{{ getvalue(scope.row) }}</span>
+                <span v-else>{{ scope.row.value }}</span>
               </template>
             </el-table-column>
-
-              <el-table-column align="center">
+            <el-table-column align="center" label="描述">
               <template slot-scope="scope">
-                <span>{{scope.row.remark }}</span>
+                <span> {{ scope.row.name }}</span>
               </template>
             </el-table-column>
 
@@ -37,12 +37,6 @@
                   size="mini"
                   @click="typeedit(props.row)"
                 >修改</el-button>
-                  <el-button
-                  type="danger"
-                  size="mini"
-                  icon="el-icon-delete"
-                  @click="deleteType(props.row)"
-                  >删除</el-button>
                 </el-button-group>
           </el-form>
         </template>
@@ -51,74 +45,73 @@
         </el-card>
             <!-- 添加配置类型弹框 -->
     <el-dialog title="配置资源类型" :visible.sync="asstypeVisible" v-loading="listLoading">
-      <Addtype ref="edittypedata" :editdata="edittypedata" ></Addtype>
-      <el-button type="primary" @click="addstypesub">确定</el-button>
-      <el-button @click="asstypeVisible = false">取消</el-button>
+      <service-setting ref="settingdialog" :editdata="editdata" ></service-setting>
+      <el-button type="primary" @click="onSubmit">确定</el-button>
+      <el-button @click="cancel">取消</el-button>
     </el-dialog>
     </div> 
 </template>
 <script>
-import { configlistAll ,configcreate, deletetype} from "@/api/cfg";
-import Addtype from "./components/Addtype";
+import { getserviec,updateServiceSetting} from "@/api/cfg";
+import serviceSetting from "./components/serviceSetting";
 export default {
     components: {
-    Addtype,
+    serviceSetting,
   },
     created() {
-      this.configlistAll();
+      this.getserviec();
     },
     data() {
         return {
             typelist: null,
             listLoading:false,
             asstypeVisible:false,
-            edittypedata:{}
+            editdata: null,
         };
     },
     methods:{
      onSubmit(){
-
+       this.listLoading = true;
+       this.editdata.value = this.$refs.settingdialog.maybe;
+       updateServiceSetting(this.editdata.id,this.editdata).then(response => {
+        this.listLoading = false;
+        this.asstypeVisible = false;
+        this.getserviec();
+      }).catch(() => {
+          this.listLoading = false;
+          this.asstypeVisible = false;
+      })
      },
-     configlistAll(){
+     getserviec(){
       this.listLoading = true;
-      configlistAll().then(response => {
+      getserviec().then(response => {
         this.listLoading = false;
         this.typelist = response.data;
       });
      },
-         //添加类型
-     addstypesub(){
-       this.listLoading = true;
-       configcreate(this.$refs.edittypedata.editdata).then(response => {
-        this.asstypeVisible = false;
-        this.listLoading = false;
-        this.configlistAll()
-      }).catch(() => {
-              this.listLoading = false;
-              this.$message("添加失败");
-            })
+         //取消
+     cancel(){
+       this.editdata = {}
+       this.asstypeVisible = false;
      },
-     deleteType(data){
-        this.$confirm('删除类型将不能找回，类型相关的资源也将删除，是否确定删除', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-            this.listLoading = true;
-            deletetype(data.id).then(response=>{
-                this.listLoading = false;
-                this.configlistAll()
-            }).catch(err=>{
-                this.listLoading = false;
-                this.$message("删除失败");
-            })
-        })
-     },
+  
      typeedit(data){
-         this.edittypedata = data;
-         this.asstypeVisible = true;
-     }
+       
+        this.editdata = data;
+        this.asstypeVisible = true;
+     },
+     getvalue(row){
+      var teturn = ""
+      JSON.parse(row.maybe).forEach(element => {
+                      if(row.value == element.value){
+                          teturn = element.key
+                      }
+                  })
+      return teturn
     }
+    },
+
+    
 }
 </script>
 <style scoped>

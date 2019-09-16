@@ -158,6 +158,30 @@ export function configcreate(data) {
       }
     })
   }
+
+  /**
+   * GET /config/getserviec
+   * 获取服务器配置
+   */
+  export function getserviec(){
+    return request({
+      url:'/config/getserviec',
+      method:'GET',
+    })
+  }
+
+
+  /**
+  * /config/updateServiceSetting/{id}
+  * 更新服务器配置
+   */
+  export function updateServiceSetting(id,data){
+    return request({
+      url:'/config/updateServiceSetting/'+id,
+      method:'POST',
+      data:data
+    })
+  }
   
   
 
