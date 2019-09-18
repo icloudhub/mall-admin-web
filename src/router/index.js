@@ -7,6 +7,8 @@ Vue.use(Router)
 import Layout from '../views/layout/Layout'
 import userrouter from './user'
 import cfgrouter from './cfg'
+import stationrouter from './station'
+
 
 /**
  * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
@@ -36,6 +38,7 @@ export const constantRouterMap = [
   },
   userrouter,
   cfgrouter,
+  stationrouter,
   {
     path: '/pms',
     component: Layout,
