@@ -6,7 +6,7 @@
           <span>筛选搜索</span>
           <el-button
             style="float: right"
-            @click="getsourcebytype()"
+            @click="getlist()"
             type="primary"
             size="small"
           >查询结果</el-button>
@@ -19,7 +19,7 @@
           <div style="margin-top: 15px">
             <el-form :inline="true" :model="searchdata" size="small" label-width="140px">
               <el-form-item label="自提地点">
-              <el-input style="width: 203px" v-model="searchdata.search" placeholder="自提地点"></el-input>
+              <el-input style="width: 203px" v-model="searchdata.address" placeholder="自提地点"></el-input>
               </el-form-item>
               <el-form-item label="状态">
               <el-select
@@ -30,7 +30,7 @@
                     v-for="item in statuslist"
                     :key="item.key"
                     :label="item.value"
-                    :value="item.value"
+                    :value="item.key"
                   ></el-option>
                 </el-select>
                 </el-form-item>
@@ -96,7 +96,7 @@
               <el-table-column label="操作" align="center">
               <template slot-scope="scope">
                 <el-button-group>
-              <el-button size="mini" type="success"  @click="showdialog" >审核</el-button>
+              <el-button size="mini" type="success"  @click="showdialog(scope.row)" >审核</el-button>
               </el-button-group>
               </template>
             </el-table-column>
@@ -105,17 +105,17 @@
 
     <!-- 审核弹框 -->
     <el-dialog title="自提点审核" :visible.sync="dialogVisible" v-loading="listLoading">
-      <Station-status ref="stationStatus" :editdata="editdata"></Station-status>
+      <Station-status ref="stationStatus" :stationId="editdata"></Station-status>
       <el-button @click="dialogVisible = false">取消</el-button>
-      <el-button type="primary" @click="addsoutcesub">通过</el-button>
-      <el-button type="primary" @click="addsoutcesub">拒绝</el-button>
+      <el-button type="primary" @click="changeStation(1)">通过</el-button>
+      <el-button type="primary" @click="changeStation(2)">拒绝</el-button>
     </el-dialog>
  
   </div>
 </template>
 
 <script>
-import {history,list} from "@/api/station";
+import {updatestatus,list} from "@/api/station";
 import StationStatus from "./components/StationStatus";
 export default {
 components: {
@@ -124,8 +124,11 @@ components: {
 data() {
     return {
       list:[],
-      searchdata:{},
-      editdata:{},
+      searchdata:{
+        status:null,
+        address:null
+      },
+      editdata:0,
       listLoading:false,
       dialogVisible:false,
       statuslist:[
@@ -139,13 +142,14 @@ data() {
               key:2,
               value:"审核失败"
           }
-      ]
+      ],
     };
   },
   created() {
     this.getlist();
   },
   methods:{
+    
       //获取自提点列表
       getlist(){
         this.listLoading = true;
@@ -166,8 +170,29 @@ data() {
       },
       //显示审核框
       showdialog(cell){
-          this.editdata = cell
+        
+          this.editdata= cell.id
           this.dialogVisible = true
+      },
+      //修改审核状态
+      changeStation(vlaue){
+          console.log("状态%d 意见：%s",vlaue, this.$refs.stationStatus.detail);
+          this.listLoading = true;
+          let data = new URLSearchParams();
+          data.append("status",vlaue);
+          data.append("detail",this.$refs.stationStatus.detail);
+          updatestatus(this.editdata,data).then(response => {
+            this.listLoading = false;
+            this.dialogVisible = false
+            this.editdata= null
+            this.$refs.stationStatus.detail = null
+            this.getlist()
+        }); 
+      },
+      // 清理搜索内容
+      clearseardata(){
+        this.searchdata = {}
+        this.getlist()
       }
   }
 }

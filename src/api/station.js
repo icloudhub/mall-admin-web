@@ -21,4 +21,16 @@ export function list(params) {
       method:'get',
       params:params
     })
-  }
+}
+
+/*
+* POST /pmsStation/update/{id}
+审核自提点/修改自提点审核状态
+*/
+export function updatestatus(id,data) {
+  return request({
+    url:'/pmsStation/update/'+id,
+    method:'post',
+    data:data
+  })
+}
