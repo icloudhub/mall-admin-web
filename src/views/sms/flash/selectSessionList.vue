@@ -55,7 +55,7 @@
         if (time == null || time === '') {
           return 'N/A';
         }
-        let date = new Date(time);
+        let date = new Date(time.substr(0,19).replace(/-/g,"/").replace('T',' '))
         return formatDate(date, 'hh:mm:ss')
       }
     },
