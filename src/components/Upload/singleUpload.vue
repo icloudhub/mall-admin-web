@@ -75,18 +75,29 @@
       handlePreview(file) {
         this.dialogVisible = true;
       },
-
+      beforeUpload(file) {
+        let _self = this;
+        return new Promise((resolve, reject) => {
+          policy().then(response => {
+            _self.dataObj.policy = response.data.policy;
+            _self.dataObj.signature = response.data.signature;
+            _self.dataObj.ossaccessKeyId = response.data.accessKeyId;
+            _self.dataObj.key = response.data.dir + '/${filename}';
+            _self.dataObj.dir = response.data.dir;
+            _self.dataObj.host = response.data.host;
+            // _self.dataObj.callback = response.data.callback;
+            resolve(true)
+          }).catch(err => {
+            console.log(err)
+            reject(false)
+          })
+        })
+      },
       handleUploadSuccess(res, file) {
         this.showFileList = true;
-        console.log(JSON.stringify(res))  
-        var el = document.createElement( 'html' );
-        el.innerHTML = res;
-        let md5 =el.getElementsByTagName( 'h1' )[0].innerHTML; // Live NodeList of your anchor elements
-        this.showFileList = true;
         this.fileList.pop();
-        this.fileList.push({name: file.name, url: "http://120.77.202.156/img" + '/' + md5.split(": ")[1]});
+        this.fileList.push({name: file.name, url: this.dataObj.host + '/' + this.dataObj.dir + '/' + file.name});
         this.emitInput(this.fileList[0].url);
-        console.log(this.fileList[0].url) 
       }
     }
   }

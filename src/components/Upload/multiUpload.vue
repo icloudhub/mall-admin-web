@@ -1,7 +1,7 @@
 <template> 
   <div>
     <el-upload
-      action="http://120.77.202.156/img/upload"
+      action="http://macro-oss.oss-cn-shenzhen.aliyuncs.com"
       :data="dataObj"
       list-type="picture-card"
       :file-list="fileList"

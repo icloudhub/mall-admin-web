@@ -5,7 +5,7 @@
     </el-button>
     <el-dialog append-to-body :visible.sync="dialogVisible">
       <el-upload class="editor-slide-upload"
-                 action="http://120.77.202.156/img/upload"
+                 action="http://macro-oss.oss-cn-shenzhen.aliyuncs.com"
                  :data="dataObj"
                  :multiple="true"
                  :file-list="fileList"
@@ -64,19 +64,12 @@
         this.fileList = [];
         this.dialogVisible = false;
       },
-      handleSuccess(res, file) {
+      handleSuccess(response, file) {
         const uid = file.uid;
         const objKeyArr = Object.keys(this.listObj)
         for (let i = 0, len = objKeyArr.length; i < len; i++) {
           if (this.listObj[objKeyArr[i]].uid === uid) {
-            // this.listObj[objKeyArr[i]].url = this.dataObj.host + '/' + this.dataObj.dir + '/' + file.name;
-             var el = document.createElement( 'html' );
-              el.innerHTML = res;
-              let md5 =el.getElementsByTagName( 'h1' )[0].innerHTML; // Live NodeList of your anchor elements
-              this.showFileList = true;
-              this.fileList.pop();
-
-            this.listObj[objKeyArr[i]].url =  "http://120.77.202.156/img" + '/' + md5.split(": ")[1];
+            this.listObj[objKeyArr[i]].url = this.dataObj.host + '/' + this.dataObj.dir + '/' + file.name;
             this.listObj[objKeyArr[i]].hasSuccess = true;
             return
           }
@@ -95,22 +88,22 @@
       beforeUpload(file) {
         const _self = this
         const fileName = file.uid;
-        // this.listObj[fileName] = {};
-        // return new Promise((resolve, reject) => {
-        //   policy().then(response => {
-        //     _self.dataObj.policy = response.data.policy;
-        //     _self.dataObj.signature = response.data.signature;
-        //     _self.dataObj.ossaccessKeyId = response.data.accessKeyId;
-        //     _self.dataObj.key = response.data.dir + '/${filename}';
-        //     _self.dataObj.dir = response.data.dir;
-        //     _self.dataObj.host = response.data.host;
+        this.listObj[fileName] = {};
+        return new Promise((resolve, reject) => {
+          policy().then(response => {
+            _self.dataObj.policy = response.data.policy;
+            _self.dataObj.signature = response.data.signature;
+            _self.dataObj.ossaccessKeyId = response.data.accessKeyId;
+            _self.dataObj.key = response.data.dir + '/${filename}';
+            _self.dataObj.dir = response.data.dir;
+            _self.dataObj.host = response.data.host;
             _self.listObj[fileName] = {hasSuccess: false, uid: file.uid, width: this.width, height: this.height};
-        //     resolve(true)
-        //   }).catch(err => {
-        //     console.log(err)
-        //     reject(false)
-        //   })
-        // })
+            resolve(true)
+          }).catch(err => {
+            console.log(err)
+            reject(false)
+          })
+        })
       }
     }
   }
