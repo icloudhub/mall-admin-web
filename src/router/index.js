@@ -8,6 +8,8 @@ import Layout from '../views/layout/Layout'
 import userrouter from './user'
 import cfgrouter from './cfg'
 import stationrouter from './station'
+import subjectrouter from './subject'
+
 
 
 /**
@@ -39,6 +41,7 @@ export const constantRouterMap = [
   userrouter,
   cfgrouter,
   stationrouter,
+  subjectrouter,
   {
     path: '/pms',
     component: Layout,
@@ -318,7 +321,7 @@ export const constantRouterMap = [
 ]
 
 export default new Router({
-  // mode: 'history', //后端支持可开
+  mode: 'history', //后端支持可开
   scrollBehavior: () => ({y: 0}),
   routes: constantRouterMap
 })
