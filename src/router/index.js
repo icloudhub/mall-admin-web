@@ -160,6 +160,13 @@ export const constantRouterMap = [
         meta: {title: '订单列表', icon: 'product-list'}
       },
       {
+        path: 'stationOrderList',
+        name: 'stationOrderList',
+        component: () => import('@/views/oms/order/stationOrderList'),
+        meta: {title: '自提订单列表', icon: 'el-icon-trophy'}
+      },
+      
+      {
         path: 'orderDetail',
         name: 'orderDetail',
         component: () => import('@/views/oms/order/orderDetail'),
