@@ -38,13 +38,41 @@
         <el-table-column label="添加时间" width="160" align="center">
           <template slot-scope="scope">{{scope.row.createTime | formatTime}}</template>
         </el-table-column>
+         <el-table-column label="操作" width="180" align="center">
+          <template slot-scope="scope">
+            <el-button size="mini"
+                       type="text"
+                       @click="handleEdit(scope.$index, scope.row)">编辑
+            </el-button>
+          </template>
+        </el-table-column>
       </el-table>
+      <el-dialog title="编辑主题"
+               :visible.sync="editsubjectVisible"
+               :model="editData"
+               width="60%">
+      <editsubject >
+   
+      
+      </editsubject>
+      <span slot="footer">
+        <el-button @click="sortDialogVisible = false" size="small">取 消</el-button>
+        <el-button type="primary"  size="small">确 定</el-button>
+      </span>
+    </el-dialog>
     </div>
+    
 </template>
 
 <script>
- import {fetchList as fetchSubjectList} from '@/api/subject';
+import {formatDate} from '@/utils/date';
+ import {fetchList } from '@/api/subject';
+ import editsubject  from './components/edit';
 export default {
+  components:{
+   editsubject
+  },
+  
   data() {
       return {
         listLoading:false,
@@ -54,14 +82,29 @@ export default {
             pageSize: 5
         },
         list:null,
+        editData:null,
+        editsubjectVisible:false,
         total:0
       }
     },
-  methods: {
     created() {
-      alert("");
+
       this.getList();
     },
+    filters: {
+
+      formatTime(time) {
+        if (time == null || time === '') {
+          return 'N/A';
+        }
+        
+        let date = new Date(time.substr(0,19).replace(/-/g,"/").replace('T',' '))
+        return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
+      },
+
+    },
+  methods: {
+ 
     handleSearchList(){
 
     },
@@ -69,13 +112,17 @@ export default {
 
     },
     getList() {
-      console.log("--getList");
-        // this.listLoading = true;
-        // fetchList(this.searchdata).then(response => {
-        //   this.listLoading = false;
-        //   this.list = response.data.list;
-        //   this.total = response.data.total;
-        // })
+  
+      this.listLoading = true;
+      fetchList(this.searchdata).then(response => {
+      this.listLoading = false;
+      this.list = response.data.list;
+      this.total = response.data.total;
+       })
+    },
+    handleEdit(data) {
+      this.editData = data
+      this.editsubjectVisible = true
     }
   }
 }
