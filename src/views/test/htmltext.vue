@@ -1,6 +1,5 @@
 <template>
     <div>
-
       <attributedText  v-model="content"></attributedText>
     </div>
 </template>
@@ -16,7 +15,7 @@ export default {
   },
   data() {
     return {
-      content: "this.value",
+      content: "this value",
     }
   }
 }

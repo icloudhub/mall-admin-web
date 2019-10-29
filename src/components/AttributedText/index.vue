@@ -182,13 +182,12 @@ export default {
 
 <style>
 .editor {
-    background-color: yellow;
+
     line-height: normal !important;
-    height: 800px;
   
 }
 .ql-toolbar.ql-snow {
-    border: 8px solid #ccc;
+  
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
