@@ -49,15 +49,14 @@
       </el-table>
       <el-dialog title="编辑主题"
                :visible.sync="editsubjectVisible"
-               :model="editData"
+               v-loading="listLoading"
                width="60%">
-      <editsubject >
-   
-      
+      <editsubject ref="editsubject" :indata="editData">
+
       </editsubject>
       <span slot="footer">
-        <el-button @click="sortDialogVisible = false" size="small">取 消</el-button>
-        <el-button type="primary"  size="small">确 定</el-button>
+        <el-button @click="editsubjectVisible = false" size="small">取 消</el-button>
+        <el-button type="primary"  size="small" @click="onSubmit">确 定</el-button>
       </span>
     </el-dialog>
     </div>
@@ -66,7 +65,7 @@
 
 <script>
 import {formatDate} from '@/utils/date';
- import {fetchList } from '@/api/subject';
+ import {fetchList ,update} from '@/api/subject';
  import editsubject  from './components/edit';
 export default {
   components:{
@@ -121,9 +120,24 @@ export default {
        })
     },
     handleEdit(data) {
-      this.editData = data
+      this.editData = JSON.stringify(this.list[data])
       this.editsubjectVisible = true
-    }
+    },
+    onSubmit() {
+      // alert(JSON.stringify(this.$refs.editsubject.editdata))
+      let subjectdata =  this.$refs.editsubject.editdata
+      if(subjectdata.id){
+        this.listLoading = true;
+        update(subjectdata.id, subjectdata).then(response => {
+          this.listLoading = false;
+          this.editsubjectVisible = false
+       })
+      }else{
+
+      }
+     }
+    
+    
   }
 }
 </script>

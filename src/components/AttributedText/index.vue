@@ -2,7 +2,7 @@
     <div>
         <!-- 图片上传组件辅助-->
       <el-upload
-        class="avatar-uploader"
+        class="attributed-uploader"
         :action="serverUrl"
         name="img"
         :headers="header"
@@ -90,7 +90,7 @@ export default {
               image: function(value) {
                 if (value) {
                   // 触发input框选择图片文件
-                  document.querySelector(".avatar-uploader input").click();
+                  document.querySelector(".attributed-uploader input").click();
                 } else {
                   this.quill.format("image", false);
                 }

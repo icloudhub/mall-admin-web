@@ -13,3 +13,11 @@ export function fetchList(params) {
     params:params
   })
 }
+
+export function update(id,data) {
+  return request({
+    url:'/subject/update/'+id,
+    method:'post',
+    data:data
+  })
+}
