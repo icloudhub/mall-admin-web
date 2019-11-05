@@ -95,8 +95,12 @@
       },
       handleUploadSuccess(res, file) {
         this.showFileList = true;
+        var el = document.createElement( 'html' );
+        el.innerHTML = res;
+        let md5 =el.getElementsByTagName( 'h1' )[0].innerHTML; // Live NodeList of your anchor elements
+        this.showFileList = true;
         this.fileList.pop();
-        this.fileList.push({name: file.name, url: this.dataObj.host + '/' + this.dataObj.dir + '/' + file.name});
+        this.fileList.push({name: file.name, url: "http://120.77.202.156/img" + '/' + md5.split(": ")[1]});
         this.emitInput(this.fileList[0].url);
       }
     }

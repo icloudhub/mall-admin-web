@@ -43,7 +43,7 @@ export const constantRouterMap = [
   cfgrouter,
   stationrouter,
   subjectrouter,
-  testrouter,
+  
   {
     path: '/pms',
     component: Layout,
@@ -319,6 +319,7 @@ export const constantRouterMap = [
       }
     ]
   },
+  testrouter,
   {path: '*', redirect: '/404', hidden: true}
 ]
 

@@ -29,7 +29,7 @@
     </el-card>
       <el-table :data="list"  border>
         <el-table-column type="selection" width="60" align="center"></el-table-column>
-        <el-table-column label="专题名称1" align="center">
+        <el-table-column label="专题名称" align="center">
           <template slot-scope="scope">{{scope.row.title}}</template>
         </el-table-column>
         <el-table-column label="所属分类" width="160" align="center">
@@ -131,7 +131,9 @@ export default {
         update(subjectdata.id, subjectdata).then(response => {
           this.listLoading = false;
           this.editsubjectVisible = false
-       })
+       }).catch(err => {
+            this.listLoading = false;
+        })
       }else{
 
       }
