@@ -19,7 +19,8 @@
          <scoped-upload v-model="editdata.pic"></scoped-upload> 
    </el-form-item>
   <el-form-item label="活动形式">
-    <attributedText  v-model="editdata.content"></attributedText>
+    <!-- <attributedText  v-model="editdata.content"></attributedText> -->
+    <tinymce v-model="editdata.content"  />
   </el-form-item>
 
 </el-form>
@@ -29,12 +30,13 @@
 
 <script>
 import attributedText  from "@/components/attributedText";
+import Tinymce from '@/components/Tinymce'
 import ScopedUpload from '@/components/Upload/scopedUpload'
 export default {
     props: {
       indata:String
     },
-    components:{attributedText,ScopedUpload},
+    components:{attributedText,ScopedUpload,Tinymce},
     watch:{
        indata: {
     　　handler(newName, oldName) {
