@@ -137,20 +137,7 @@
       <el-form-item label="商品相册：">
         <multi-upload v-model="selectProductPics"></multi-upload>
       </el-form-item>
-      <el-form-item label="规格参数：">
-        <el-tabs v-model="activeHtmlName" type="card">
-          <el-tab-pane label="电脑端详情" name="pc">
-            <tinymce :width="595" :height="300" v-model="value.detailHtml"></tinymce>
-          </el-tab-pane>
-          <el-tab-pane label="移动端详情" name="mobile">
-            <tinymce :width="595" :height="300" v-model="value.detailMobileHtml"></tinymce>
-          </el-tab-pane>
-        </el-tabs>
-      </el-form-item>
-      <el-form-item style="text-align: center">
-        <el-button size="medium" @click="handlePrev">上一步，填写商品促销</el-button>
-        <el-button type="primary" size="medium" @click="handleNext">下一步，选择商品关联</el-button>
-      </el-form-item>
+     
     </el-form>
   </div>
 </template>
@@ -431,8 +418,10 @@
         });
       },
       refreshProductSkuList() {
+       
         this.value.skuStockList = [];
         let skuList = this.value.skuStockList;
+
         //只有一个属性时
         if (this.selectProductAttr.length === 1) {
           let values = this.selectProductAttr[0].values;
@@ -487,6 +476,7 @@
             }
           }
         }
+
       },
       refreshProductAttrPics() {
         this.selectProductAttrPics = [];
@@ -562,14 +552,6 @@
       getParamInputList(inputList) {
         return inputList.split(',');
       },
-      handlePrev() {
-        this.$emit('prevStep')
-      },
-      handleNext() {
-        this.mergeProductAttrValue();
-        this.mergeProductAttrPics();
-        this.$emit('nextStep')
-      }
     }
   }
 </script>
@@ -583,13 +565,10 @@
     margin-top: 10px;
   }
 
-  .paramInput {
-    width: 250px;
-  }
+
 
   .paramInputLabel {
     display: inline-block;
-    width: 100px;
     text-align: right;
     padding-right: 10px
   }
