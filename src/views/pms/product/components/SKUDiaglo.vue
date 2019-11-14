@@ -16,7 +16,7 @@
               v-if="productAttr.handAddStatus===0"
               v-model="selectProductAttr[idx].values"
             >
-              <el-radio>
+              <el-radio
                 v-for="item in getInputListArr(productAttr.inputList)"
                 :label="item"
                 :key="item"
@@ -49,24 +49,24 @@
         </el-card>
       </el-form-item>
       <el-form-item label="销售价格">
-        <el-input v-model="skudata.price"></el-input>
+        <el-input v-model="eidtdata.price"></el-input>
       </el-form-item>
       <el-form-item label="市场价格">
-        <el-input v-model="skudata.originalPrice"></el-input>
+        <el-input v-model="eidtdata.originalPrice"></el-input>
       </el-form-item>
       <el-form-item label="商品库存">
-        <el-input v-model="skudata.stock"></el-input>
+        <el-input v-model="eidtdata.stock"></el-input>
       </el-form-item>
       <el-form-item label="库存预警值">
-        <el-input v-model="skudata.low_stock"></el-input>
+        <el-input v-model="eidtdata.low_stock"></el-input>
       </el-form-item>
       <el-form-item label="SKU编号">
-        <el-input v-model="skudata.skuCode"></el-input>
+        <el-input v-model="eidtdata.skuCode"></el-input>
       </el-form-item>
       <el-form-item label="属性图片：">
         <el-card shadow="never" class="cardBg">
           <single-upload
-            v-model="skudata.pic"
+            v-model="eidtdata.pic"
             style="width: 300px;display: inline-block;margin-left: 10px"
           ></single-upload>
         </el-card>
@@ -77,6 +77,7 @@
 <script>
 import { fetchList as fetchProductAttrList } from "@/api/productAttr";
 import { fetchList as fetchProductAttrCateList } from "@/api/productAttrCate";
+
 import SingleUpload from "@/components/Upload/singleUpload";
 export default {
   components: { SingleUpload },
@@ -89,38 +90,33 @@ export default {
       default: false
     }
   },
+  watch:{
+    value(newval){
+      if(newval != null){
+        let jsonstr = JSON.stringify(newval)
+        this.eidtdata = JSON.parse(jsonstr);
+      }
+      alert(JSON.stringify(this.eidtdata))
+    }
+  },
   data() {
     return {
       //可手动添加的商品属性
       addProductAttrValue: "",
 
       productAttributeCategoryOptions: [],
-      skudata: Map
+      eidtdata: {}
     };
+  },
+  watch:{
+    categoryId(value){
+        this.getProductAttrList(0, value);
+        this.getProductAttrList(1, value);
+    }
   },
  
   methods: {
   
-    handleProductAttrChange(value) {
-      alert(this.categoryId)
-      if (this.categoryId == null) {
-        this.$confirm(
-          "修改属性类型将会删除已设置的所有sku，是否确认修改",
-          "提示",
-          {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            type: "warning"
-          }
-        ).then(() => {
-          this.getProductAttrList(0, value);
-          this.getProductAttrList(1, value);
-        });
-      }else{
-          this.getProductAttrList(0, value);
-          this.getProductAttrList(1, value);
-      }
-    },
     getProductAttrList(type, cid) {
       let param = { pageNum: 1, pageSize: 100, type: type };
       fetchProductAttrList(cid, param).then(response => {
@@ -173,7 +169,31 @@ export default {
     },
     getInputListArr(inputList) {
       return inputList.split(",");
-    }
+    },
+      handleAddProductAttrValue(idx) {
+        let options = this.selectProductAttr[idx].options;
+        if (this.addProductAttrValue == null || this.addProductAttrValue == '') {
+          this.$message({
+            message: '属性值不能为空',
+            type: 'warning',
+            duration: 1000
+          });
+          return
+        }
+        if (options.indexOf(this.addProductAttrValue) !== -1) {
+          this.$message({
+            message: '属性值不能重复',
+            type: 'warning',
+            duration: 1000
+          });
+          return;
+        }
+        this.selectProductAttr[idx].options.push(this.addProductAttrValue);
+        this.addProductAttrValue = null;
+      },
+      handleRemoveProductAttrValue(idx, index) {
+        this.selectProductAttr[idx].options.splice(index, 1);
+      },
   }
 };
 </script>
