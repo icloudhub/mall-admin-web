@@ -21,3 +21,30 @@ export function update(id,data) {
     data:data
   })
 }
+
+/**
+ * /subject/create
+ * 添加专题
+ * @param {*} id 
+ * @param {*} data 
+ */
+export function create(data) {
+  return request({
+    url:'/subject/create',
+    method:'post',
+    data:data
+  })
+}
+
+/**
+ * /subject/delete/{id}
+ * 删除专题
+ */
+export function deleteby(id) {
+  return request({
+    url:'/subject/delete/'+id,
+    method:'post',
+    data:id
+  })
+}
+

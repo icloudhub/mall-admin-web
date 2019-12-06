@@ -12,7 +12,7 @@
         :on-success="handleSuccess"
         :before-upload="beforeUpload"
         class="editor-slide-upload"
-        action="https://httpbin.org/post"
+        action="http://120.77.202.156/img/upload/"
         list-type="picture-card"
       >
         <el-button size="small" type="primary">
@@ -63,11 +63,17 @@ export default {
       this.dialogVisible = false
     },
     handleSuccess(response, file) {
+
+      var el = document.createElement( 'html' );
+      el.innerHTML = response;
+      let md5 =el.getElementsByTagName( 'h1' )[0].innerHTML; // Live NodeList of your anchor elements
+      let url =  "http://120.77.202.156/img" + '/' + md5.split(": ")[1]
+      
       const uid = file.uid
       const objKeyArr = Object.keys(this.listObj)
       for (let i = 0, len = objKeyArr.length; i < len; i++) {
         if (this.listObj[objKeyArr[i]].uid === uid) {
-          this.listObj[objKeyArr[i]].url = response.files.file
+          this.listObj[objKeyArr[i]].url = url
           this.listObj[objKeyArr[i]].hasSuccess = true
           return
         }

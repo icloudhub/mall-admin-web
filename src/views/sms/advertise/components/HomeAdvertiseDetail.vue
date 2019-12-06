@@ -37,7 +37,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="广告图片：">
-        <single-upload v-model="homeAdvertise.pic"></single-upload>
+        <scoped-upload v-model="homeAdvertise.pic"></scoped-upload>
       </el-form-item>
       <el-form-item label="排序：">
         <el-input v-model="homeAdvertise.sort" class="input-width"></el-input>
@@ -62,7 +62,7 @@
   </el-card>
 </template>
 <script>
-  import SingleUpload from '@/components/Upload/singleUpload'
+  import scopedUpload from '@/components/Upload/scopedUpload'
   import {createHomeAdvertise, getHomeAdvertise, updateHomeAdvertise} from '@/api/homeAdvertise'
   const defaultTypeOptions = [
     {
@@ -87,7 +87,7 @@
   };
   export default {
     name: 'HomeAdvertiseDetail',
-    components:{SingleUpload},
+    components:{scopedUpload},
     props: {
       isEdit: {
         type: Boolean,

@@ -157,10 +157,6 @@
           </el-table-column>
         </el-table>
       </el-form-item>
-      <el-form-item style="text-align: center">
-        <el-button size="medium" @click="handlePrev">上一步，填写商品信息</el-button>
-        <el-button type="primary" size="medium" @click="handleNext">下一步，填写商品属性</el-button>
-      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -291,12 +287,6 @@
           });
         }
       },
-      handlePrev() {
-        this.$emit('prevStep')
-      },
-      handleNext() {
-        this.$emit('nextStep')
-      }
     }
   }
 </script>

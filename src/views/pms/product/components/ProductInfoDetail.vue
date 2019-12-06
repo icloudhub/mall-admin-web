@@ -49,9 +49,6 @@
       <el-form-item label="排序">
         <el-input v-model="value.sort"></el-input>
       </el-form-item>
-      <el-form-item style="text-align: center">
-        <el-button type="primary" size="medium" @click="handleNext('productInfoForm')">下一步，填写商品促销</el-button>
-      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -74,7 +71,7 @@
       return {
         hasEditCreated:false,
         //选中商品分类的值
-        selectProductCateValue: [],
+        selectProductCateValue: Array,
         productCateOptions: [],
         brandOptions: [],
         rules: {
@@ -161,20 +158,6 @@
           }
         }
         return name;
-      },
-      handleNext(formName){
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.$emit('nextStep');
-          } else {
-            this.$message({
-              message: '验证失败',
-              type: 'error',
-              duration:1000
-            });
-            return false;
-          }
-        });
       },
       handleBrandChange(val) {
         let brandName = '';

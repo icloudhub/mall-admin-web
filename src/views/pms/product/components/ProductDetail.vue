@@ -1,45 +1,68 @@
 <template> 
-  <el-card class="form-container" shadow="never">
-    <el-steps :active="active" finish-status="success" align-center>
-      <el-step title="填写商品信息"></el-step>
-      <el-step title="填写商品促销"></el-step>
-      <el-step title="填写商品属性"></el-step>
-      <el-step title="选择商品关联"></el-step>
-    </el-steps>
-    <product-info-detail
-      v-show="showStatus[0]"
-      v-model="productParam"
-      :is-edit="isEdit"
-      @nextStep="nextStep">
+ <div class="app-container">
+  <el-card >
+  
+    <el-tabs tab-position="left">
+    <el-tab-pane label="填写商品信息">  
+    <product-info-detail v-model="productParam">
     </product-info-detail>
-    <product-sale-detail
-      v-show="showStatus[1]"
+    </el-tab-pane>
+
+    <el-tab-pane label="填写商品促销">
+      <product-sale-detail
       v-model="productParam"
-      :is-edit="isEdit"
-      @nextStep="nextStep"
-      @prevStep="prevStep">
+      :is-edit="isEdit">
     </product-sale-detail>
+
+    </el-tab-pane>
+
+    <el-tab-pane label="填写商品属性">
     <product-attr-detail
-      v-show="showStatus[2]"
+   
       v-model="productParam"
       :is-edit="isEdit"
-      @nextStep="nextStep"
-      @prevStep="prevStep">
+     >
     </product-attr-detail>
-    <product-relation-detail
-      v-show="showStatus[3]"
+    </el-tab-pane>
+
+    <el-tab-pane label="填写商品SKU信息">
+      <product-sku-detail
+      v-model="productParam"
+      :is-edit="isEdit">
+    </product-sku-detail>
+    </el-tab-pane>
+
+    
+
+    <el-tab-pane label="编辑商品html详情">
+    <product-detail-html
+   
       v-model="productParam"
       :is-edit="isEdit"
-      @prevStep="prevStep"
-      @finishCommit="finishCommit">
+     >
+    </product-detail-html>
+    </el-tab-pane>
+
+    
+    <el-tab-pane label="选择商品关联">
+    <product-relation-detail v-model="productParam">
     </product-relation-detail>
+    </el-tab-pane>
+  </el-tabs>
+  <el-button-group>
+  <el-button type="primary" size="medium" @click="handleFinishCommit">完成，提交商品</el-button>
+   </el-button-group>
   </el-card>
+ </div>
 </template>
 <script>
   import ProductInfoDetail from './ProductInfoDetail';
   import ProductSaleDetail from './ProductSaleDetail';
   import ProductAttrDetail from './ProductAttrDetail';
   import ProductRelationDetail from './ProductRelationDetail';
+  import ProductDetailHtml from './ProductDetailHtml';
+  import ProductSkuDetail from './ProductSkuDetail';
+  
   import {createProduct,getProduct,updateProduct} from '@/api/product';
 
   const defaultProductParam = {
@@ -105,7 +128,7 @@
   };
   export default {
     name: 'ProductDetail',
-    components: {ProductInfoDetail, ProductSaleDetail, ProductAttrDetail, ProductRelationDetail},
+    components: {ProductInfoDetail, ProductSaleDetail, ProductAttrDetail, ProductRelationDetail,ProductDetailHtml,ProductSkuDetail},
     props: {
       isEdit: {
         type: Boolean,
@@ -146,7 +169,7 @@
           this.showStatus[this.active] = true;
         }
       },
-      finishCommit(isEdit) {
+      handleFinishCommit(isEdit) {
         this.$confirm('是否要提交该产品', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -176,10 +199,5 @@
     }
   }
 </script>
-<style>
-  .form-container {
-    width: 800px;
-  }
-</style>
 
 

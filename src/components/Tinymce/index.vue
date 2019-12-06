@@ -27,7 +27,8 @@ export default {
     id: {
       type: String,
       default: function() {
-        return 'vue-tinymce-' + +new Date() + ((Math.random() * 1000).toFixed(0) + '')
+        let idstr = 'vue-tinymce-' + +new Date() + ((Math.random() * 1000).toFixed(0) + '')
+        return idstr
       }
     },
     value: {
@@ -116,7 +117,7 @@ export default {
       const _this = this
       window.tinymce.init({
         selector: `#${this.tinymceId}`,
-        language: this.languageTypeList['en'],
+        language: 'zh_CN',
         height: this.height,
         body_class: 'panel-body ',
         object_resizing: false,
