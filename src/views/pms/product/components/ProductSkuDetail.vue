@@ -6,15 +6,14 @@
       <el-button class="btn-add" @click="handleAddSku()" size="mini">添加</el-button>
     </el-card>
     <el-select
-      v-model="value.productAttributeCategoryId"
+      v-model="selectCategory"
       placeholder="请选择属性类型"
-      :disabled="changeAtt"
       @change="handleProductAttrChange"
     >
       <el-option
         v-for="item in productAttributeCategoryOptions"
         :key="item.value"
-        :label="item.label"
+        :label="item.name"
         :value="item.value"
       ></el-option>
     </el-select>
@@ -94,6 +93,7 @@ export default {
   },
   watch: {
     value(newval) {
+      
       this.getProductAttrCateList();
       this.getskuList();
       this.getProductAttrList(this.value.productAttributeCategoryId)
@@ -103,6 +103,7 @@ export default {
   data() {
     return {
       changeAtt: true, //是否可修改规格属性
+      
       listLoading: false,
       selectProductAttr: [],
       addsoutceVisible: false,
@@ -110,9 +111,13 @@ export default {
       //可手动添加的商品属性
       addProductAttrValue: "",
       //商品属性分类下拉选项
-      productAttributeCategoryOptions: [],
+      productAttributeCategoryOptions: [
+  
+      ],
       //商品sku列表
       skuStockList: [],
+      // 选中的分类item
+      selectCategory:null,
       productAttr:[]
     };
   },
@@ -141,8 +146,9 @@ export default {
         this.changeAtt = false;
       });
     },
-    handleProductAttrChange(value) {
-      getProductAttrList(value)
+    handleProductAttrChange(selval) {
+      alert(JSON.stringify(selval))
+      this.getProductAttrList(selval)
     },
 
     addsoutcesub() {
@@ -174,8 +180,9 @@ export default {
     getProductAttrCateList() {
       let param = { pageNum: 1, pageSize: 101 };
       fetchProductAttrCateList(param).then(response => {
-        this.productAttributeCategoryOptions = [];
-        let list = response.data.list;
+        this.productAttributeCategoryOptions = response.data.list
+        this.selectCategory = this.getProductAttributeCategorynameById(this.value.productAttributeCategoryId).name
+        alert(JSON.stringify(this.selectCategory))
       });
     },
     getProductAttrList(cid) {
@@ -189,7 +196,20 @@ export default {
       getskulist(this.$route.query.id).then(response => {
         this.skuStockList = response.data;
       });
+    },
+    getProductAttributeCategorynameById(proid) {
+     
+      for (const key in this.productAttributeCategoryOptions) {
+        if (this.productAttributeCategoryOptions.hasOwnProperty(key)) {
+          const element = this.productAttributeCategoryOptions[key];
+          if(element.id == proid){
+            return  element
+          }
+          
+        }
+      }
     }
+
   }
 };
 </script>

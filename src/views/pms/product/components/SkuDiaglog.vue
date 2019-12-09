@@ -113,23 +113,16 @@ export default {
       selectProductAttr:[],
       //可手动添加的商品属性
       addProductAttrValue: "",
-      eidtdata: {}
+      eidtdata: {
+        attributlvaluelist:Array,
+      }
     };
   },
 
   methods: {
-    // getProductAttrList(cid) {
-    //   let param = { pageNum: 1, pageSize: 102, type: 0 };
-    //   fetchProductAttrList(cid, param).then(response => {
-    //     this.selectProductAttr = response.data.list;
-    //     for (let i = 0; i < this.selectProductAttr.length; i++) {
-    //       var itemdata = this.selectProductAttr[i];
-    //       itemdata.options = [];
-    //       itemdata.selected = nil;
-    //       }
-    //   });
-    // },
+
     reloadAttdata(){
+      alert(JSON.stringify(this.eidtdata))
         for (let i = 0; i < this.selectProductAttr.length; i++) {
           var itemdata = this.selectProductAttr[i];
           itemdata.options = [];
@@ -163,30 +156,6 @@ export default {
     getInputListArr(inputList) {
       return inputList.split(",");
     }
-    // handleAddProductAttrValue(idx) {
-    //   let options = this.selectProductAttr[idx].options;
-    //   if (this.addProductAttrValue == null || this.addProductAttrValue == '') {
-    //     this.$message({
-    //       message: '属性值不能为空',
-    //       type: 'warning',
-    //       duration: 1000
-    //     });
-    //     return
-    //   }
-    //   if (options.indexOf(this.addProductAttrValue) !== -1) {
-    //     this.$message({
-    //       message: '属性值不能重复',
-    //       type: 'warning',
-    //       duration: 1000
-    //     });
-    //     return;
-    //   }
-    //   this.selectProductAttr[idx].options.push(this.addProductAttrValue);
-    //   this.addProductAttrValue = null;
-    // },
-    // handleRemoveProductAttrValue(idx, index) {
-    //   this.selectProductAttr[idx].options.splice(index, 1);
-    // },
   }
 };
 </script>
