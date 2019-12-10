@@ -78,7 +78,7 @@
 <script>
 import { fetchList as fetchProductAttrCateList } from "@/api/productAttrCate";
 import { fetchList as fetchProductAttrList } from "@/api/productAttr";
-import { addSkustore, getskulist } from "@/api/skuStock";
+import { addSkustore, getskulist ,updateskuitem} from "@/api/skuStock";
 import SkuDiaglog from "./SkuDiaglog";
 // import mytext from "./mytext"
 export default {
@@ -153,29 +153,45 @@ export default {
 
     addsoutcesub() {
       let temdata = this.$refs.editdialog.eidtdata;
-
-      let attributlvaluelist = [];
-      let list = this.selectProductAttr;
+      let list = this.$refs.editdialog.selectProductAttr;
+    
+      var attributlvaluelist = []
       for (let i = 0; i < list.length; i++) {
+        let temdata = list[i]
+        let selectdata = temdata.selected;
+        
         attributlvaluelist.push({
           productAttributeId: list[i].id,
           productId: this.$route.query.id,
           skuid: temdata.id,
-          value: list[i].values
+          value: selectdata
         });
       }
       temdata.productId = this.$route.query.id;
       temdata.attributlvaluelist = attributlvaluelist;
+     
       this.listLoading = true;
-
-      addSkustore(temdata)
+      if(temdata.id == null){
+           addSkustore(temdata)
         .then(response => {
           this.listLoading = false;
           this.addsoutceVisible = false;
+          this.getskuList()
         })
         .catch(() => {
           this.listLoading = false;
         });
+      }else{
+         updateskuitem(temdata)
+        .then(response => {
+          this.listLoading = false;
+          this.addsoutceVisible = false;
+          this.getskuList()
+        })
+        .catch(() => {
+          this.listLoading = false;
+        });
+      }
     },
     getProductAttrCateList() {
       let param = { pageNum: 1, pageSize: 101 };
@@ -194,6 +210,7 @@ export default {
 
     getskuList() {
       getskulist(this.$route.query.id).then(response => {
+        alert("skulist ="+JSON.stringify(response.data))
         this.skuStockList = response.data;
       });
     },

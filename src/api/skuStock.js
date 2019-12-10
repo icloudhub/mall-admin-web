@@ -17,6 +17,19 @@ export function update(pid,data) {
 }
 
 /**
+ * /sku/updateskuitem
+ */
+export function updateskuitem(data) {
+  return request({
+    url:'/sku/updateskuitem',
+    method:'post',
+    data:data
+  })
+}
+
+
+
+/**
  * /sku/create
  * 给商品添加SKU信息
  * @param {*} data 

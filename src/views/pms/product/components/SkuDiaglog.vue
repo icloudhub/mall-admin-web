@@ -11,40 +11,27 @@
         <el-card shadow="never" class="cardBg">
           <div v-for=" (productAttr,idx) in selectProductAttr ">
             {{productAttr.name}}
-            <!-- <el-radio-group
+             <el-radio-group
               v-if="productAttr.handAddStatus===0"
-              v-model="productAttr.selected.value"
+              v-model="productAttr.selected"
             >
+             {{productAttr}}
               <el-radio
-                v-for="(item,index) in selectProductAttr[idx].options"
+                v-for="(item,index) in productAttr.options"
                 :label="item.value"
                 :key="item.value"
                 class="littleMarginLeft"
               ></el-radio>
             </el-radio-group>
 
-            <div v-else> -->
-              <!-- <el-radio-group v-model="productAttr.selected.value">
-                <div
-                  v-for="(item,index) in selectProductAttr[idx].options"
-                  style="display: inline-block"
-                  class="littleMarginLeft"
-                >
-                  <el-radio :label="item.value" :key="item.value"></el-radio>
-                  <el-button
-                    type="text"
-                    class="littleMarginLeft"
-                    @click="handleRemoveProductAttrValue(idx,index)"
-                  >删除</el-button>
-                </div>
-              </el-radio-group> -->
-              <!-- <el-input
-                v-model="productAttr.selected.value"
+            <div v-else> 
+               <el-input
+                v-model="productAttr.selected"
                 style="width: 160px;margin-left: 10px"
                 clearable
               ></el-input>
           
-            </div> -->
+            </div> 
           </div>
         </el-card>
       </el-form-item>
@@ -89,7 +76,6 @@ export default {
   watch: {
     value: {
       handler(newName, oldName) {
-        alert("value="+JSON.stringify(newName))
         if (newName) {
           let jsonstr = JSON.stringify(newName);
           this.eidtdata = JSON.parse(jsonstr);
@@ -103,7 +89,6 @@ export default {
         
           let attstr = JSON.stringify(newName);
           this.selectProductAttr = JSON.parse(attstr);
-          
           this.reloadAttdata();
           
       },
@@ -125,8 +110,7 @@ export default {
   methods: {
 
     reloadAttdata(){
-      
-        alert("reloadAttdata="+JSON.stringify(this.selectProductAttr))
+
         for (let i = 0; i < this.selectProductAttr.length; i++) {
           // alert("for");
           var itemdata = this.selectProductAttr[i];
@@ -140,7 +124,7 @@ export default {
                 var temdata = new Object();
                 temdata.value = attdata.value;
                 itemdata.options.push(attdata);
-                itemdata.selected = temdata;
+                itemdata.selected = temdata.value;
               }
             }
             } 
@@ -156,7 +140,7 @@ export default {
               for (let j = 0;j < this.eidtdata.attributlvaluelist.length;j++) {
                 var attdata = this.eidtdata.attributlvaluelist[j];
                 if (attdata.productAttributeId == itemdata.id && attdata.value == temdata.value ) {
-                  itemdata.selected = temdata;
+                  itemdata.selected = temdata.value;
                 }
               }
             }
