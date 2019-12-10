@@ -11,7 +11,7 @@
         <el-card shadow="never" class="cardBg">
           <div v-for=" (productAttr,idx) in selectProductAttr ">
             {{productAttr.name}}
-            <el-radio-group
+            <!-- <el-radio-group
               v-if="productAttr.handAddStatus===0"
               v-model="productAttr.selected.value"
             >
@@ -23,7 +23,7 @@
               ></el-radio>
             </el-radio-group>
 
-            <div v-else>
+            <div v-else> -->
               <!-- <el-radio-group v-model="productAttr.selected.value">
                 <div
                   v-for="(item,index) in selectProductAttr[idx].options"
@@ -38,13 +38,13 @@
                   >删除</el-button>
                 </div>
               </el-radio-group> -->
-              <el-input
+              <!-- <el-input
                 v-model="productAttr.selected.value"
                 style="width: 160px;margin-left: 10px"
                 clearable
               ></el-input>
           
-            </div>
+            </div> -->
           </div>
         </el-card>
       </el-form-item>
@@ -84,11 +84,12 @@ export default {
   components: { SingleUpload },
   props: {
     value: Object,
-    productAttr: null,
+    productAttr: Array,
   },
   watch: {
     value: {
       handler(newName, oldName) {
+        alert("value="+JSON.stringify(newName))
         if (newName) {
           let jsonstr = JSON.stringify(newName);
           this.eidtdata = JSON.parse(jsonstr);
@@ -99,10 +100,12 @@ export default {
     },
     productAttr: {
       handler(newName, oldName) {
+        
           let attstr = JSON.stringify(newName);
           this.selectProductAttr = JSON.parse(attstr);
+          
           this.reloadAttdata();
-          alert(JSON.stringify(this.selectProductAttr))
+          
       },
       immediate: true
     },
@@ -122,12 +125,16 @@ export default {
   methods: {
 
     reloadAttdata(){
-      alert(JSON.stringify(this.eidtdata))
+      
+        alert("reloadAttdata="+JSON.stringify(this.selectProductAttr))
         for (let i = 0; i < this.selectProductAttr.length; i++) {
+          // alert("for");
           var itemdata = this.selectProductAttr[i];
           itemdata.options = [];
           if (itemdata.inputType == 0) {
-            for (let j = 0; j < this.eidtdata.attributlvaluelist.length; j++) {
+            let temlist = this.eidtdata.attributlvaluelist;
+            if(temlist != null){
+                 for (let j = 0; j < this.eidtdata.attributlvaluelist.length; j++) {
               var attdata = this.eidtdata.attributlvaluelist[j];
               if (attdata.productAttributeId == itemdata.id) {
                 var temdata = new Object();
@@ -136,19 +143,23 @@ export default {
                 itemdata.selected = temdata;
               }
             }
+            } 
+           
           } else {
             var openlist = itemdata.inputList.split(",");
             for (let j = 0; j < openlist.length; j++) {
               var temdata = new Object();
               temdata.value = openlist[j];
               itemdata.options.push(temdata);
-
+              let temlist = this.eidtdata.attributlvaluelist;
+            if(temlist != null){
               for (let j = 0;j < this.eidtdata.attributlvaluelist.length;j++) {
                 var attdata = this.eidtdata.attributlvaluelist[j];
                 if (attdata.productAttributeId == itemdata.id && attdata.value == temdata.value ) {
                   itemdata.selected = temdata;
                 }
               }
+            }
             }
           }
         }
