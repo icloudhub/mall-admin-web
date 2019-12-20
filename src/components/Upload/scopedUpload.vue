@@ -3,7 +3,8 @@
 <el-upload
   class="avatar-uploader"
   action="http://120.77.202.156/img/upload/"
-  :show-file-list="false"
+  list-type="picture-card"
+  :show-file-list="true"
   :on-success="handleAvatarSuccess"
   :before-upload="beforeAvatarUpload"
   :file-list="fileList"

@@ -8,7 +8,7 @@
     </product-info-detail>
     </el-tab-pane>
 
-    <el-tab-pane label="填写商品促销">
+    <el-tab-pane label="填写商品促销" v-if="isEdit">
       <product-sale-detail
       v-model="productParam"
       :is-edit="isEdit">
@@ -16,7 +16,7 @@
 
     </el-tab-pane>
 
-    <el-tab-pane label="填写商品属性">
+    <el-tab-pane label="填写商品相册" v-if="isEdit">
     <product-attr-detail
    
       v-model="productParam"
@@ -25,16 +25,15 @@
     </product-attr-detail>
     </el-tab-pane>
 
-    <el-tab-pane label="填写商品SKU信息">
+    <el-tab-pane label="填写商品SKU信息" v-if="isEdit">
       <product-sku-detail
-      v-model="productParam"
+      v-model="this.$route.query.id"
       :is-edit="isEdit">
     </product-sku-detail>
     </el-tab-pane>
 
-    
 
-    <el-tab-pane label="编辑商品html详情">
+    <el-tab-pane label="编辑商品html详情" v-if="isEdit">
     <product-detail-html
    
       v-model="productParam"
@@ -43,15 +42,16 @@
     </product-detail-html>
     </el-tab-pane>
 
-    
-    <el-tab-pane label="选择商品关联">
+    <el-tab-pane label="选择商品关联" v-if="isEdit">
     <product-relation-detail v-model="productParam">
     </product-relation-detail>
     </el-tab-pane>
+
   </el-tabs>
   <el-button-group>
-  <el-button type="primary" size="medium" @click="handleFinishCommit">完成，提交商品</el-button>
+  <el-button type="primary" size="medium" @click="handleFinishCommit">保存</el-button>
    </el-button-group>
+  
   </el-card>
  </div>
 </template>
@@ -124,7 +124,8 @@
     unit: '',
     usePointLimit: 0,
     verifyStatus: 0,
-    weight: 0
+    weight: 0,
+    ownerid: 0,
   };
   export default {
     name: 'ProductDetail',
@@ -175,7 +176,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          if(isEdit){
+          if( this.$route.query.id>0){
             updateProduct(this.$route.query.id,this.productParam).then(response=>{
               this.$message({
                 type: 'success',

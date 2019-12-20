@@ -1,8 +1,7 @@
 <template> 
   <div>
-    <el-upload
-      action="http://macro-oss.oss-cn-shenzhen.aliyuncs.com"
-      :data="dataObj"
+    <!-- <el-upload
+      action="http://120.77.202.156/img/upload/"
       list-type="picture-card"
       :file-list="fileList"
       :before-upload="beforeUpload"
@@ -11,9 +10,22 @@
       :on-preview="handlePreview"
       :limit="1"
       :on-exceed="handleExceed"
-    >
-      <i class="el-icon-plus"></i>
-    </el-upload>
+    > -->
+
+      <!-- <i class="el-icon-plus"></i>
+    </el-upload> -->
+    <el-upload
+  class="avatar-uploader"
+  action="http://120.77.202.156/img/upload/"
+  list-type="picture-card"
+  :show-file-list="true"
+  :on-success="handleUploadSuccess"
+  :before-upload="beforeUpload"
+  :file-list="fileList"
+  :on-remove="handleRemove"
+  :on-preview="handlePreview">
+
+</el-upload>
     <el-dialog :visible.sync="dialogVisible">
       <img width="100%" :src="dialogImageUrl" alt="">
     </el-dialog>
@@ -72,24 +84,20 @@
         this.dialogImageUrl=file.url;
       },
       beforeUpload(file) {
-        let _self = this;
-        return new Promise((resolve, reject) => {
-          policy().then(response => {
-            _self.dataObj.policy = response.data.policy;
-            _self.dataObj.signature = response.data.signature;
-            _self.dataObj.ossaccessKeyId = response.data.accessKeyId;
-            _self.dataObj.key = response.data.dir + '/${filename}';
-            _self.dataObj.dir = response.data.dir;
-            _self.dataObj.host = response.data.host;
-            resolve(true)
-          }).catch(err => {
-            console.log(err)
-            reject(false)
-          })
-        })
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 2MB!');
+        }
+        return isLt2M;
       },
       handleUploadSuccess(res, file) {
-        this.fileList.push({url: file.name,url:this.dataObj.host + '/' + this.dataObj.dir + '/' + file.name});
+
+        console.log(JSON.stringify(res))  
+        var el = document.createElement( 'html' );
+        el.innerHTML = res;
+        let md5 =el.getElementsByTagName( 'h1' )[0].innerHTML; // Live NodeList of your anchor elements
+        this.showFileList = true;
+        this.fileList.push({name: file.name, url: "http://120.77.202.156/img" + '/' + md5.split(": ")[1]});
         this.emitInput(this.fileList);
       },
       handleExceed(files, fileList) {

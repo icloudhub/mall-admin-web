@@ -62,8 +62,9 @@
   </div>
 </template>
 <script>
-import { fetchList as fetchProductAttrList } from "@/api/productAttr";
+
 import { fetchList as fetchProductAttrCateList } from "@/api/productAttrCate";
+import { fetchList as fetchProductAttrList } from "@/api/productAttr";
 
 import SingleUpload from "@/components/Upload/singleUpload";
 export default {
@@ -71,7 +72,7 @@ export default {
   components: { SingleUpload },
   props: {
     value: Object,
-    productAttr: Array,
+    cid: 0,
   },
   watch: {
     value: {
@@ -79,26 +80,22 @@ export default {
         if (newName) {
           let jsonstr = JSON.stringify(newName);
           this.eidtdata = JSON.parse(jsonstr);
-          this.reloadAttdata();
+          this.getProductAttrList(this.cid);
         }
       },
       immediate: true
     },
-    productAttr: {
+    cid: {
       handler(newName, oldName) {
-        
-          let attstr = JSON.stringify(newName);
-          this.selectProductAttr = JSON.parse(attstr);
-          this.reloadAttdata();
-          
-      },
-      immediate: true
+        this.getProductAttrList(newName);
+      }
     },
     
   },
   data() {
     return {
       selectProductAttr:[],
+      productAttr:[], //属性分类下单分类列表
       //可手动添加的商品属性
       addProductAttrValue: "",
       eidtdata: {
@@ -112,7 +109,6 @@ export default {
     reloadAttdata(){
 
         for (let i = 0; i < this.selectProductAttr.length; i++) {
-          // alert("for");
           var itemdata = this.selectProductAttr[i];
           itemdata.options = [];
           if (itemdata.inputType == 0) {
@@ -147,6 +143,16 @@ export default {
             }
           }
         }
+    },
+    getProductAttrList(cid) {
+      alert("getProductAttrList"+JSON.stringify(cid))
+      let param = { pageNum: 1, pageSize: 102, type: 0 };
+      fetchProductAttrList(cid, param).then(response => {
+        this.productAttr = response.data.list;
+        let attstr = JSON.stringify(this.productAttr);
+        this.selectProductAttr = JSON.parse(attstr);
+        this.reloadAttdata();
+      });
     },
     getInputListArr(inputList) {
       return inputList.split(",");
