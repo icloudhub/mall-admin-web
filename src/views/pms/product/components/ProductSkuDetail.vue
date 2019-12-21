@@ -87,16 +87,24 @@ export default {
   name: "ProductSkuDetail",
   components: { SkuDiaglog },
   props: {
-    proId: String,
+    proId: 0,
+  },
+  watch:{
+    proId: {
+      handler(newValue, oldValue) {
+        getProduct(newValue).then(response=>{
+          this.value=response.data;
+          this.getProductAttrCateList();
+          this.getskuList();
+          this.getProductAttrList(this.value.productAttributeCategoryId)
+        });
+      },
+      immediate: true
+    },
   },
 
   created() {
-      getProduct(this.$route.query.id).then(response=>{
-        this.value=response.data;
-        this.getProductAttrCateList();
-        this.getskuList();
-        this.getProductAttrList(this.value.productAttributeCategoryId)
-      });
+   
   },
   data() {
     return {
@@ -150,12 +158,12 @@ export default {
         
         attributlvaluelist.push({
           productAttributeId: list[i].id,
-          productId: this.$route.query.id,
+          productId: this.proId,
           skuid: temdata.id,
           value: selectdata
         });
       }
-      temdata.productId = this.$route.query.id;
+      temdata.productId = this.proId;
       temdata.attributlvaluelist = attributlvaluelist;
      
       this.listLoading = true;
@@ -200,7 +208,7 @@ export default {
     },
 
     getskuList() {
-      getskulist(this.$route.query.id).then(response => {
+      getskulist(this.proId).then(response => {
    
         this.skuStockList = response.data;
       });
@@ -221,7 +229,7 @@ export default {
       let temjson = JSON.stringify(this.value)
       var temvalue = JSON.parse(temjson);
       temvalue.productAttributeCategoryId = this.selectCategory;
-      if(temvalue.id != this.$route.query.id || temvalue.id == null){
+      if(temvalue.id != this.proId || temvalue.id == null){
         alert("商品id错误")
         return ;
       }
@@ -232,7 +240,7 @@ export default {
           type: 'warning'
         }).then(() => {
           
-            updateProduct(this.$route.query.id,temvalue).then(response=>{
+            updateProduct(this.proId,temvalue).then(response=>{
               this.$message({
                 type: 'success',
                 message: '提交成功',

@@ -26,9 +26,7 @@
     </el-tab-pane>
 
     <el-tab-pane label="填写商品SKU信息" v-if="isEdit">
-      <product-sku-detail
-      v-model="this.$route.query.id"
-      :is-edit="isEdit">
+    <product-sku-detail :proId = "this.$route.query.id">
     </product-sku-detail>
     </el-tab-pane>
 
@@ -47,6 +45,12 @@
     </product-relation-detail>
     </el-tab-pane>
 
+    <el-tab-pane label="商品预览" v-if="isEdit">
+    <product-scan v-model="this.$route.query.id">
+    </product-scan>
+    </el-tab-pane>
+
+
   </el-tabs>
   <el-button-group>
   <el-button type="primary" size="medium" @click="handleFinishCommit">保存</el-button>
@@ -62,6 +66,7 @@
   import ProductRelationDetail from './ProductRelationDetail';
   import ProductDetailHtml from './ProductDetailHtml';
   import ProductSkuDetail from './ProductSkuDetail';
+  import ProductScan from './ProductScan';
   
   import {createProduct,getProduct,updateProduct} from '@/api/product';
 
@@ -129,7 +134,7 @@
   };
   export default {
     name: 'ProductDetail',
-    components: {ProductInfoDetail, ProductSaleDetail, ProductAttrDetail, ProductRelationDetail,ProductDetailHtml,ProductSkuDetail},
+    components: {ProductInfoDetail, ProductSaleDetail, ProductAttrDetail, ProductRelationDetail,ProductDetailHtml,ProductSkuDetail,ProductScan},
     props: {
       isEdit: {
         type: Boolean,
