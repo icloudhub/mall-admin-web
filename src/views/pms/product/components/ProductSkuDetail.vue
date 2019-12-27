@@ -64,7 +64,7 @@
     </el-table>
 
     <!-- 添加配置资源弹框 -->
-    <el-dialog title="配置资源" :visible.sync="addsoutceVisible" v-loading="listLoading">
+    <el-dialog title="添加sku" :visible.sync="addsoutceVisible" v-loading="listLoading">
       <sku-diaglog
         ref="editdialog"
         :cid="this.value.productAttributeCategoryId"
@@ -172,7 +172,7 @@ export default {
         .then(response => {
           this.listLoading = false;
           this.addsoutceVisible = false;
-          this.getskuList()
+          location.reload()
         })
         .catch(() => {
           this.listLoading = false;
@@ -182,7 +182,7 @@ export default {
         .then(response => {
           this.listLoading = false;
           this.addsoutceVisible = false;
-          this.getskuList()
+          location.reload()
         })
         .catch(() => {
           this.listLoading = false;
@@ -246,7 +246,7 @@ export default {
                 message: '提交成功',
                 duration:1000
               });
-              this.getProductAttrList(this.selectCategory)
+              location.reload()
             }).catch(() => {
           this.selectCategory = this.value.productAttributeCategoryId 
             })

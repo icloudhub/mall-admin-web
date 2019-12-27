@@ -188,7 +188,7 @@
                 message: '提交成功',
                 duration:1000
               });
-              this.$router.back();
+              location.reload()
             });
           }else{
             createProduct(this.productParam).then(response=>{

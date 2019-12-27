@@ -37,7 +37,7 @@
     <el-card>
       <div v-html="product.detailMobileHtml"></div>
     </el-card>
-    {{this.product}}
+   
   </div>
 </template>
 <script>
@@ -77,7 +77,6 @@ export default {
         return [];
       }
     },
-    getselectSku() {},
     /**
      * 点击事件
      */
