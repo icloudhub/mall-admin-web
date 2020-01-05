@@ -109,13 +109,13 @@ export default {
      },
      updatetypesub(){
        this.listLoading = true;
-       updatetype(this.$refs.edittypedata.data.id,this.$refs.edittypedata.editdata).then(response => {
+       updatetype(this.$refs.edittypedata.editdata.id,this.$refs.edittypedata.data).then(response => {
         this.asstypeVisible = false;
         this.listLoading = false;
         this.configlistAll()
       }).catch(() => {
           this.listLoading = false;
-          this.$message("添加失败");
+          this.$message("修改失败");
       })
      },
      deleteType(data){
