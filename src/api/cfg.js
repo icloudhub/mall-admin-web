@@ -163,10 +163,13 @@ export function configcreate(data) {
    * GET /config/getserviec
    * 获取服务器配置
    */
-  export function getserviec(){
+  export function getserviec(parentid){
     return request({
       url:'/config/getserviec',
       method:'GET',
+      params:{
+        parentid:parentid
+      }
     })
   }
 

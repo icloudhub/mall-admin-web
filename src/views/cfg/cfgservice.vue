@@ -1,119 +1,149 @@
 <template>
- <div>
+  <div>
+    <el-row style="margin:10px">
+      <el-col :span="6">
         <el-card class="filter-container" shadow="never">
-          
           <el-table
-            ref="productTable"
+            ref="typelistTable"
             :data="typelist"
+            highlight-current-row
             style="width: 100%"
+            @current-change="selectcfgtyperow"
             v-loading="listLoading"
             border
           >
-          <el-table-column align="center" label="标签">
+            <el-table-column align="center">
               <template slot-scope="scope">
-                <span>{{ scope.row.id }}</span>
+                <span>{{ scope.row.name }}</span>
               </template>
-            </el-table-column>
-
-              <el-table-column align="center" label="设置值">
-              <template slot-scope="scope">
-                <span v-if="scope.row.maybe">{{ getvalue(scope.row) }}</span>
-                <span v-else>{{ scope.row.value }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column align="center" label="描述">
-              <template slot-scope="scope">
-                <span> {{ scope.row.name }}</span>
-              </template>
-            </el-table-column>
-
-            <el-table-column >
-        <template slot-scope="props">
-          <el-form label-position="left" inline class="demo-table-expand">
-     <el-button-group >
-                <el-button
-                  type="primary"
-                  icon="el-icon-edit"
-                  size="mini"
-                  @click="typeedit(props.row)"
-                >修改</el-button>
-                </el-button-group>
-          </el-form>
-        </template>
             </el-table-column>
           </el-table>
         </el-card>
-            <!-- 添加配置类型弹框 -->
-    <el-dialog title="配置资源类型" :visible.sync="asstypeVisible" v-loading="listLoading">
-      <service-setting ref="settingdialog" :editdata="editdata" ></service-setting>
-      <el-button type="primary" @click="onSubmit">确定</el-button>
-      <el-button @click="cancel">取消</el-button>
-    </el-dialog>
-    </div> 
+      </el-col>
+      <el-col :span="12">
+        <el-card class="filter-container" shadow="never">
+    
+            <el-table
+              ref="productTable"
+              :data="configList"
+              style="width: 100%"
+              v-loading="listLoading"
+              border
+            >
+              <el-table-column align="center" label="标签">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.name }}</span>
+                </template>
+              </el-table-column>
+
+              <el-table-column align="center" label="设置值">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.type == 1">
+                    <el-select v-model="scope.row.value" placeholder="请选择">
+                      <el-option
+                        v-for="item in scope.row.values"
+                        :key="item.value"
+                        :label="item.remark"
+                        :value="item.value"
+                      ></el-option>
+                    </el-select>
+                  </span>
+                  <span v-else>
+                    <el-input v-model="scope.row.value"></el-input>
+                  </span>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作">
+                <template slot-scope="props">
+                  <el-form label-position="left" inline class="demo-table-expand">
+                    <el-button-group>
+                      <el-button
+                        type="primary"
+                        icon="el-icon-edit"
+                        size="mini"
+                        @click="onSubmit(props.row)"
+                      >保存</el-button>
+                    </el-button-group>
+                  </el-form>
+                </template>
+              </el-table-column>
+            </el-table>
+        
+        </el-card>
+      </el-col>
+    </el-row>
+    
+  </div>
 </template>
 <script>
-import { getserviec,updateServiceSetting} from "@/api/cfg";
-import serviceSetting from "./components/serviceSetting";
+import { getserviec, updateServiceSetting } from "@/api/cfg";
+
 export default {
-    components: {
-    serviceSetting,
+  
+  created() {
+    this.getserviecType();
   },
-    created() {
-      this.getserviec();
+  data() {
+    return {
+      configList: null,
+      typelist: null,
+      listLoading: false,
+      editdata: null
+    };
+  },
+  methods: {
+    
+    //操作
+    selectcfgtyperow(val) {
+      this.editdata = val;
+      this.getserviec()
     },
-    data() {
-        return {
-            typelist: null,
-            listLoading:false,
-            asstypeVisible:false,
-            editdata: null,
-        };
-    },
-    methods:{
-     onSubmit(){
-       this.listLoading = true;
-       this.editdata.value = this.$refs.settingdialog.maybe;
-       updateServiceSetting(this.editdata.id,this.editdata).then(response => {
-        this.listLoading = false;
-        this.asstypeVisible = false;
-        this.getserviec();
-      }).catch(() => {
-          this.listLoading = false;
-          this.asstypeVisible = false;
-      })
-     },
-     getserviec(){
+    // 请求
+    getserviecType() {
       this.listLoading = true;
-      getserviec().then(response => {
+      getserviec(0).then(response => {
         this.listLoading = false;
         this.typelist = response.data;
+        this.editdata = this.typelist[0];
+        this.getserviec()
       });
-     },
-         //取消
-     cancel(){
-       this.editdata = {}
-       this.asstypeVisible = false;
-     },
-  
-     typeedit(data){
-       
-        this.editdata = data;
-        this.asstypeVisible = true;
-     },
-     getvalue(row){
-      var teturn = ""
-      JSON.parse(row.maybe).forEach(element => {
-                      if(row.value == element.value){
-                          teturn = element.key
-                      }
-                  })
-      return teturn
-    }
+    },
+    getserviec() {
+
+      this.listLoading = true;
+      getserviec(this.editdata.id).then(response => {
+        this.listLoading = false;
+        this.configList = response.data;
+      });
     },
 
-    
-}
+  //保存
+
+    onSubmit(data) {
+      this.listLoading = true;
+      updateServiceSetting(data.id, data)
+        .then(response => {
+          this.listLoading = false;
+          this.getserviec();
+        })
+        .catch(() => {
+          this.listLoading = false;
+        });
+    },
+
+    // get
+    getvalue(data) {
+      var valuestr = "";
+      data.values.forEach(element => {
+        if (element.value == data.value) {
+          valuestr = element.remark;
+        }
+      });
+
+      return valuestr;
+    }
+  }
+};
 </script>
 <style scoped>
-
 </style>
