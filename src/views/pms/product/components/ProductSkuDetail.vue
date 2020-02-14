@@ -234,7 +234,7 @@ export default {
         return ;
       }
       
-        this.$confirm('是否确认修改商品分类信息，如果修改将导致此商品下sku数据全部删除，并下架商品', '提示', {
+        this.$confirm('是否确认修改商品分类信息，如果修改将导致此商品下sku数据全部删除，并下架商品，等待审核后才可以上架', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'

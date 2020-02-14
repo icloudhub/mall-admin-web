@@ -51,7 +51,7 @@
       </div>
       <div class="un-handle-content">
         <el-row :gutter="20">
-          <el-col :span="8" v-for="(item,i)  in orderCountresult">
+          <el-col :span="8" v-for="item  in orderCountresult" :key="orderCountresult.id">
             <div class="un-handle-item">
               <span class="font-medium">{{formatStatus(item.status)}}</span>
               <span style="float: right" class="color-danger">{{item.num+"个"}}</span>

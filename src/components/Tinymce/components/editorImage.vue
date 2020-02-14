@@ -10,6 +10,7 @@
         :show-file-list="true"
         :on-remove="handleRemove"
         :on-success="handleSuccess"
+        :on-error="handleError"
         :before-upload="beforeUpload"
         class="editor-slide-upload"
         action="http://120.77.202.156/img/upload/"
@@ -78,6 +79,9 @@ export default {
           return
         }
       }
+    },
+    handleError(error,file){
+      alert("上传失败"+JSON.stringify(error)+JSON.stringify(file))
     },
     handleRemove(file) {
       const uid = file.uid

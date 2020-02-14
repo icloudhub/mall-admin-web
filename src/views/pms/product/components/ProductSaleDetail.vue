@@ -17,13 +17,7 @@
           :inactive-value="0">
         </el-switch>
       </el-form-item>
-      <el-form-item label="商品上架：">
-        <el-switch
-          v-model="value.publishStatus"
-          :active-value="1"
-          :inactive-value="0">
-        </el-switch>
-      </el-form-item>
+      
       <el-form-item label="商品推荐：">
         <span style="margin-right: 10px">新品</span>
         <el-switch

@@ -109,7 +109,10 @@ export default {
       });
     },
     getserviec() {
-
+      if(this.editdata == null){
+        alert("无配置项")
+        return;
+      }
       this.listLoading = true;
       getserviec(this.editdata.id).then(response => {
         this.listLoading = false;

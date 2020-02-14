@@ -1,6 +1,5 @@
 <template>
   <div>
-    商品预览
     <el-carousel indicator-position="outside" height="400px">
       <el-carousel-item v-for="item in getProductalbumPics()" :key="item">
         <el-image :src="item" class="img-style"></el-image>
@@ -9,9 +8,15 @@
     <el-card>
       <h3>{{product.name}}</h3>
       <h5>{{product.subTitle}}</h5>
-      <h5 v-for="(item) in selectsku.attributes" :key="item.id">{{item.value}}</h5>
-      <h5>{{"¥"+selectsku.price +"元/"+product.unit }}</h5>
-      <h5>{{"销量"+selectsku.sale }}</h5>
+      <h5>{{"价格区间"+product.price }}</h5>
+      <div v-if="selectsku">
+        <h5 v-for="(item) in selectsku.attributes" :key="item.id">{{item.value}}</h5>
+        <h5>{{"¥"+selectsku.price +"元/"+product.unit }}</h5>
+        <h5>{{"销量"+selectsku.sale }}</h5>
+      </div>
+      <div v-else>
+        <h5 style="color:red">此规格下无商品</h5>
+      </div>
     </el-card>
     <el-card v-if="product.description">
       <h5>{{product.description}}</h5>
@@ -52,7 +57,9 @@ export default {
   },
   watch: {
     value: {
+      
       handler(newValue, oldValue) {
+        console.log("预览商品"+newValue);
         getProduct(newValue).then(response => {
           this.product = response.data;
           this.selectsku = this.product.skuStockList[0];
@@ -94,6 +101,7 @@ export default {
           atts.push(aelement.value);
         });
         atts.sort();
+        
         if (JSON.stringify(atts) == JSON.stringify(values)) {
           this.selectsku = selement;
         }

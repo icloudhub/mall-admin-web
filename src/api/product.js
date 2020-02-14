@@ -70,3 +70,12 @@ export function getProduct(id) {
   })
 }
 
+export function updateVerifyStatus(data){
+
+  return request({
+    url:'/product/update/verifyStatus',
+    method:'post',
+    data:data
+  })
+}
+

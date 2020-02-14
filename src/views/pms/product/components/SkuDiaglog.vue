@@ -123,7 +123,7 @@ export default {
                 itemdata.selected = temdata.value;
               }
             }
-            } 
+          } 
            
           } else {
             var openlist = itemdata.inputList.split(",");

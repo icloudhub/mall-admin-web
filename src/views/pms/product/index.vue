@@ -143,13 +143,21 @@
         </el-table-column>
         <el-table-column label="审核状态" width="100" align="center">
           <template slot-scope="scope">
-            <p>{{scope.row.verifyStatus | verifyStatusFilter}}</p>
+            <p>审核：
+            <el-switch
+                @change="handleVerifyStatusChange(scope.$index, scope.row)"
+                :active-value="1"
+                :inactive-value="0"
+                v-model="scope.row.verifyStatus">
+              </el-switch>
+              </p>
             <p>
               <el-button
                 type="text"
                 @click="handleShowVerifyDetail(scope.$index, scope.row)">审核详情
               </el-button>
             </p>
+           
           </template>
         </el-table-column>
         <el-table-column label="操作" width="160" align="center">
@@ -218,6 +226,13 @@
       <product-sku-detail :proId="editSkuInfo.productId">
     </product-sku-detail>
     </el-dialog>
+    <el-dialog
+      title="预览商品信息"
+      :visible.sync="scanProduct.dialogVisible"
+      width="40%">
+      <product-scan v-model="scanProduct.productId">
+    </product-scan>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -226,8 +241,10 @@
     updateDeleteStatus,
     updateNewStatus,
     updateRecommendStatus,
-    updatePublishStatus
+    updatePublishStatus,
+    updateVerifyStatus
   } from '@/api/product'
+  import ProductScan from './components/ProductScan';
 
   import {fetchList as fetchSkuStockList,update as updateSkuStockList} from '@/api/skuStock'
   import {fetchList as fetchProductAttrList} from '@/api/productAttr'
@@ -246,7 +263,8 @@
   };
   export default {
     name: "productList",
-    components: {ProductSkuDetail},
+    components: {ProductSkuDetail,ProductScan},
+    
     data() {
       return {
         editSkuInfo:{
@@ -257,6 +275,10 @@
           stockList:[],
           productAttr:[],
           keyword:null
+        },
+        scanProduct:{
+          dialogVisible:false,
+          productId:null
         },
         operates: [
           {
@@ -357,6 +379,8 @@
           this.listLoading = false;
           this.list = response.data.list;
           this.total = response.data.total;
+        }).then(()=>{
+          this.listLoading = false;
         });
       },
       getBrandList() {
@@ -515,6 +539,18 @@
         ids.push(row.id);
         this.updateRecommendStatus(row.recommandStatus, ids);
       },
+      handleVerifyStatusChange(ndex, row){
+        this.$confirm('是否确认审核操作?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let ids = [];
+          ids.push(row.id);
+          this.updateVerifyStatusChange(row.verifyStatus,ids,"")
+         
+        });
+      },
       handleResetSearch() {
         this.selectProductCateValue = [];
         this.listQuery = Object.assign({}, defaultListQuery);
@@ -535,9 +571,16 @@
       },
       handleShowProduct(index,row){
         console.log("handleShowProduct",row);
+        this.scanProduct.dialogVisible=true;
+        this.scanProduct.productId=row.id;
+     
       },
       handleShowVerifyDetail(index,row){
         console.log("handleShowVerifyDetail",row);
+        
+        this.scanProduct.dialogVisible=true;
+        this.scanProduct.productId=row.id;
+        
       },
       handleShowLog(index,row){
         console.log("handleShowLog",row);
@@ -552,6 +595,8 @@
             type: 'success',
             duration: 1000
           });
+        }).catch(err => {
+          this.getList();
         });
       },
       updateNewStatus(newStatus, ids) {
@@ -588,8 +633,24 @@
             type: 'success',
             duration: 1000
           });
+        }).catch(err => {
+          this.getList();
         });
-        this.getList();
+      },
+      updateVerifyStatusChange(verifyStatus, ids, detail) {
+        let params = new URLSearchParams();
+        params.append('ids', ids);
+        params.append('verifyStatus', verifyStatus);
+        params.append('detail', detail);
+        updateVerifyStatus(params).then(response => {
+          this.$message({
+            message: '操作成功',
+            type: 'success',
+            duration: 1000
+          });
+        }).catch(err => {
+          this.getList();
+        });
       }
     }
   }
