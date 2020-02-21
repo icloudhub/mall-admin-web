@@ -45,7 +45,7 @@
         <el-input v-model="eidtdata.stock"></el-input>
       </el-form-item>
       <el-form-item label="库存预警值">
-        <el-input v-model="eidtdata.low_stock"></el-input>
+        <el-input v-model="eidtdata.lowStock"></el-input>
       </el-form-item>
       <el-form-item label="SKU编号">
         <el-input v-model="eidtdata.skuCode"></el-input>
@@ -145,7 +145,7 @@ export default {
         }
     },
     getProductAttrList(cid) {
-      alert("getProductAttrList"+JSON.stringify(cid))
+      
       let param = { pageNum: 1, pageSize: 102, type: 0 };
       fetchProductAttrList(cid, param).then(response => {
         this.productAttr = response.data.list;

@@ -564,6 +564,7 @@
           let ids = [];
           ids.push(row.id);
           this.updateDeleteStatus(1,ids);
+          
         });
       },
       handleUpdateProduct(index,row){
@@ -633,6 +634,7 @@
             type: 'success',
             duration: 1000
           });
+          this.getList();
         }).catch(err => {
           this.getList();
         });

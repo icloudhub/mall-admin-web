@@ -17,7 +17,7 @@
 
         <el-table-column align="center" label="状态">
           <template slot-scope="scope">
-            <span>{{scope.row.status }}</span>
+            <span>{{scope.row.status | formatStatus }}</span>
           </template>
         </el-table-column>
 
@@ -75,6 +75,22 @@ export default {
   created() {
     this.getverlog();
   },
+  filters: {
+     formatStatus(value) {
+      //状态 0->待上传 1->待上架 2->已上架 3->已下架'
+        if (value === 0) {
+          return '待上传';
+        } else if (value === 1) {
+          return '待上架';
+        }  else if (value === 2) {
+          return '已上架';
+        } else if (value === 3) {
+          return '已下架';
+        }else {
+          return value;
+        }
+    },
+  },
   data() {
     return {
       list: null,
@@ -92,6 +108,7 @@ export default {
       this.editdata = data;
       this.asstypeVisible = true;
     },
+   
 
     addverlog() {
       this.listLoading = true;

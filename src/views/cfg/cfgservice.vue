@@ -36,9 +36,15 @@
                 </template>
               </el-table-column>
 
-              <el-table-column align="center" label="设置值">
+              <el-table-column align="center" label="KEY标示">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.type == 1">
+                  <span>{{ scope.row.cfgKey }}</span>
+                </template>
+              </el-table-column>
+
+              <el-table-column align="center" label="值">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.valueType == 1">
                     <el-select v-model="scope.row.value" placeholder="请选择">
                       <el-option
                         v-for="item in scope.row.values"

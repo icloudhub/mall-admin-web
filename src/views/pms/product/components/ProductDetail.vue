@@ -207,10 +207,11 @@
             createProduct(this.productParam).then(response=>{
               this.$message({
                 type: 'success',
-                message: '提交成功',
+                message: '提交成功'+JSON.stringify(response),
                 duration:1000
               });
-              location.reload();
+              alert(JSON.stringify(response.data))
+              this.$router.push({path:'/pms/updateProduct',query:{id:response.data.id}});
             });
           }
         })

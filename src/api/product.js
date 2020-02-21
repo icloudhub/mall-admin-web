@@ -79,3 +79,14 @@ export function updateVerifyStatus(data){
   })
 }
 
+
+export function updateDefualSku(params) {
+  return request({
+    url:'/product/update/defualSku',
+    method:'post',
+    params:params
+  })
+}
+
+
+

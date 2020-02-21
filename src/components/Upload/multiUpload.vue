@@ -16,7 +16,7 @@
     </el-upload> -->
     <el-upload
   class="avatar-uploader"
-  action="http://120.77.202.156/img/upload/"
+  action="http://47.107.69.245/img/upload/"
   list-type="picture-card"
   :show-file-list="true"
   :on-success="handleUploadSuccess"
@@ -97,7 +97,7 @@
         el.innerHTML = res;
         let md5 =el.getElementsByTagName( 'h1' )[0].innerHTML; // Live NodeList of your anchor elements
         this.showFileList = true;
-        this.fileList.push({name: file.name, url: "http://120.77.202.156/img" + '/' + md5.split(": ")[1]});
+        this.fileList.push({name: file.name, url: "http://47.107.69.245/img" + '/' + md5.split(": ")[1]});
         this.emitInput(this.fileList);
       },
       handleExceed(files, fileList) {
