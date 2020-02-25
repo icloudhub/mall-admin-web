@@ -33,6 +33,7 @@
                 :data="list"
                 style="width: 100%"
                 v-loading="listLoading"
+                @cell-click="handleCellClick"
                 border>
             <el-table-column
           label="用户名"
@@ -184,6 +185,9 @@ export default {
         handleResetSearch(){
             this.searchdata.search = null
             this.getList();
+        },
+        handleCellClick(row){
+          this.$router.push({path:'/user/userDetal',query:{id:row.id}});
         },
         getList(){
             this.listLoading = true;

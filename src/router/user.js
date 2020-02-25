@@ -30,7 +30,14 @@ const userrouter = {
         name: 'rolelist',
         component: () => import('@/views/user/rolelist'),
         meta: {title: '角色列表', icon: 'el-icon-thumb'}
-      }
+      },
+      {
+        path: 'userdetal',
+        name: 'userdetal',
+        component: () => import('@/views/user/userdetal'),
+        meta: {title: '会员详情', icon: 'el-icon-shopping-bag-1'},
+        hidden: true
+      },
       
     ]
   }

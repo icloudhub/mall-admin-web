@@ -190,6 +190,15 @@ export function rolepermissionupdate(data) {
 }
 
 
+/**
+ * 获取会员信息
+ */
+export function userinfo(id){
+  return request({
+    url:'/member/userinfo/'+id,
+    method:'get',
+  })
+}
 
 
 

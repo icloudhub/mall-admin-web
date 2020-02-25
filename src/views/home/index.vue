@@ -51,7 +51,7 @@
       </div>
       <div class="un-handle-content">
         <el-row :gutter="20">
-          <el-col :span="8" v-for="(item,i)  in orderCountresult">
+          <el-col :span="8" v-for="(item,index)  in orderCountresult" :key="index">
             <div class="un-handle-item">
               <span class="font-medium">{{formatStatus(item.status)}}</span>
               <span style="float: right" class="color-danger">{{item.num+"个"}}</span>
@@ -275,9 +275,11 @@ export default {
           {
             text: "最近一周",
             onClick(picker) {
-              const end = new Date();
-              let start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              
+              var start = new Date();
+              start = new Date(start-(start.getDay()-1)*86400000);
+              var end = new Date();
+              end.setDate(start.getDate()+6)
               picker.$emit("pick", [start, end]);
             }
           },
@@ -285,8 +287,20 @@ export default {
             text: "最近一月",
             onClick(picker) {
               const end = new Date();
+              end.setMonth(end.getMonth()+1);
+              end.setDate(0);
               let start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              start.setDate(1);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "全部",
+            onClick(picker) {
+              const end = new Date();
+              end.setDate(end.getDate());
+              let start = new Date();
+              start.setFullYear(2018);
               picker.$emit("pick", [start, end]);
             }
           }
@@ -380,7 +394,7 @@ export default {
       );
 
       var enddate = this.orderCountDate[1]
-      // enddate = enddate.setDate(enddate.getDate()+1)
+      enddate.setDate(enddate.getDate()+1)
       this.orderCountParam.endDate = formatDate(
         enddate,
         "yyyy-MM-dd"
