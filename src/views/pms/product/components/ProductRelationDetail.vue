@@ -2,8 +2,6 @@
   <div style="margin-top: 50px">
     <el-form :model="value"
              ref="productRelationForm"
-             label-width="120px"
-             style="width: 680px"
              size="small">
       <el-form-item label="关联专题：">
         <el-transfer

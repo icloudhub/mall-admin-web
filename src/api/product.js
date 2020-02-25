@@ -70,3 +70,23 @@ export function getProduct(id) {
   })
 }
 
+export function updateVerifyStatus(data){
+
+  return request({
+    url:'/product/update/verifyStatus',
+    method:'post',
+    data:data
+  })
+}
+
+
+export function updateDefualSku(params) {
+  return request({
+    url:'/product/update/defualSku',
+    method:'post',
+    params:params
+  })
+}
+
+
+

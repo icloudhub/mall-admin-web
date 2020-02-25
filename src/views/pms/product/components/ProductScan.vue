@@ -1,7 +1,7 @@
 <template>
   <div>
-    商品预览
     <el-carousel indicator-position="outside" height="400px">
+      
       <el-carousel-item v-for="item in getProductalbumPics()" :key="item">
         <el-image :src="item" class="img-style"></el-image>
       </el-carousel-item>
@@ -9,13 +9,71 @@
     <el-card>
       <h3>{{product.name}}</h3>
       <h5>{{product.subTitle}}</h5>
-      <h5 v-for="(item) in selectsku.attributes" :key="item.id">{{item.value}}</h5>
-      <h5>{{"¥"+selectsku.price +"元/"+product.unit }}</h5>
-      <h5>{{"销量"+selectsku.sale }}</h5>
+      <h5>{{"价格区间"+product.price }}</h5>
+      
+      <div v-if="selectsku">
+        <h5 v-for="(item) in selectsku.attributes" :key="item.id">{{item.value}}</h5>
+        <h5>{{"¥"+selectsku.price +"元/"+product.unit }}</h5>
+        <h5>{{"销量"+selectsku.sale }}</h5>
+      </div>
+      <div v-else>
+        <h5 style="color:red">此规格下无商品</h5>
+      </div>
+    </el-card>
+    <el-card>
+      <h3>促销类型:（ {{product.promotionType | formatPromotionType }}）</h3>
+      <div v-if="product.promotionType===1">
+        <div>
+          开始时间：
+          <el-date-picker
+            v-model="value.promotionStartTime"
+            value-format="timestamp"
+            type="datetime"
+            :picker-options="pickerOptions1"
+            placeholder="选择开始时间">
+          </el-date-picker>
+        </div>
+        <div class="littleMargin">
+          结束时间：
+          <el-date-picker
+            v-model="value.promotionEndTime"
+            value-format="timestamp"
+            type="datetime"
+            :picker-options="pickerOptions1"
+            placeholder="选择结束时间">
+          </el-date-picker>
+        </div>
+        <div class="littleMargin">
+          促销价格：
+          <span> -{{ product.promotionPrice }} </span>
+          <el-input style="width: 220px" v-model="product.promotionPrice" placeholder="输入促销价格"></el-input>
+        </div>
+
+      </div>
+      <div v-else-if="product.promotionType===2">
+      
+        <div v-for="(item, index) in product.memberPriceList">
+          {{item.memberLevelName}} 减：{{ item.memberPrice }}元
+        </div>
+      </div>
+      <div v-else-if="product.promotionType===3">
+        <div v-for="(item, index) in product.productLadderList">
+          满 {{item.count}} 件 打 {{ item.discount }} 折
+        </div>
+      </div>
+      <div v-else-if="product.promotionType===4">
+
+        <div v-for="(item, index) in product.productFullReductionList">
+          满 {{item.fullPrice}} 元 立减 {{ item.reducePrice }} 元
+        </div>
+      </div>
+     
+      
     </el-card>
     <el-card v-if="product.description">
       <h5>{{product.description}}</h5>
     </el-card>
+
     <el-card>
       <el-collapse>
         <el-collapse-item title="选择规格">
@@ -52,13 +110,34 @@ export default {
   },
   watch: {
     value: {
+      
       handler(newValue, oldValue) {
+        console.log("预览商品"+newValue);
         getProduct(newValue).then(response => {
           this.product = response.data;
           this.selectsku = this.product.skuStockList[0];
         });
       },
       immediate: true
+    }
+  },
+  filters:{
+    // 促销类型
+    formatPromotionType(value){
+     
+      if(value == 0){
+        return "没有促销使用原价"
+      }else if(value == 1){
+        return "使用促销价"
+      }else if(value == 2){
+        return "使用会员价"
+      }else if(value == 3){
+        return "使用阶梯价格"
+      }else if(value == 4){
+        return "使用满减价格"
+      }else if(value == 5){
+        return "限时购"
+      }
     }
   },
   data() {
@@ -94,6 +173,7 @@ export default {
           atts.push(aelement.value);
         });
         atts.sort();
+        
         if (JSON.stringify(atts) == JSON.stringify(values)) {
           this.selectsku = selement;
         }

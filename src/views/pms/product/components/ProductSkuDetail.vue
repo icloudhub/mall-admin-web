@@ -51,6 +51,14 @@
           <span>{{scope.row.skuCode}}</span>
         </template>
       </el-table-column>
+
+       <el-table-column label="默认SKU" align="center">
+        <template slot-scope="scope">
+          <el-button size="mini" type="success" v-if="value.defualSku == scope.row.id">默认</el-button>
+          <el-button size="mini" type="text" @click="handleDefualSku(scope.$index, scope.row)" v-else>设为默认</el-button>
+        </template>
+      </el-table-column>
+      
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button size="mini" type="text" @click="handleEditSku(scope.$index, scope.row)">编辑</el-button>
@@ -80,7 +88,7 @@
 import { fetchList as fetchProductAttrCateList } from "@/api/productAttrCate";
 import { fetchList as fetchProductAttrList } from "@/api/productAttr";
 import { addSkustore, getskulist ,updateskuitem} from "@/api/skuStock";
-import {getProduct,updateProduct} from '@/api/product';
+import {getProduct,updateProduct,updateDefualSku} from '@/api/product';
 import SkuDiaglog from "./SkuDiaglog";
 // import mytext from "./mytext"
 export default {
@@ -139,12 +147,38 @@ export default {
       this.eididata = this.skuStockList[value];
       this.addsoutceVisible = true;
     },
+    handleDefualSku(index){
+      this.$confirm('是否要默认sku?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.value.defualSku = this.skuStockList[index].id
+          let params=new URLSearchParams();
+          params.append("productID",this.value.id);
+          params.append("defualSku", this.value.defualSku);
+          updateDefualSku(params)
+        .then(response => {
+          this.listLoading = false;
+          this.addsoutceVisible = false;
+          this.$message({
+                type: 'success',
+                message: '设置成功',
+                duration:1000
+          });
+          location.reload()
+          
+        })
+        .catch(() => {
+          this.listLoading = false;
+          location.reload()
+        });
+        })
+
+    },
 
     handleProductAttrChange() {
-
-      
       this.handleFinishCommit();
-
     },
 
     addsoutcesub() {
@@ -200,7 +234,10 @@ export default {
       });
     },
     getProductAttrList(cid) {
-     
+      if(!cid){
+        console.log("/productAttribute/list/请求 cid为空")
+        return
+      }
       let param = { pageNum: 1, pageSize: 102, type: 0 };
       fetchProductAttrList(cid, param).then(response => {
         this.productAttr = response.data.list;
@@ -225,6 +262,7 @@ export default {
       }
       return telement;
     },
+
     handleFinishCommit() {
       let temjson = JSON.stringify(this.value)
       var temvalue = JSON.parse(temjson);
@@ -234,7 +272,7 @@ export default {
         return ;
       }
       
-        this.$confirm('是否确认修改商品分类信息，如果修改将导致此商品下sku数据全部删除，并下架商品', '提示', {
+        this.$confirm('是否确认修改商品分类信息，如果修改将导致此商品下sku数据全部删除，并下架商品，等待审核后才可以上架', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'

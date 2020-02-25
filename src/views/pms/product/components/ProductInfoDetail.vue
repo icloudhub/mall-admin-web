@@ -71,7 +71,7 @@
       return {
         hasEditCreated:false,
         //选中商品分类的值
-        selectProductCateValue: Array,
+        selectProductCateValue: [],
         productCateOptions: [],
         brandOptions: [],
         rules: {
@@ -90,6 +90,7 @@
     created() {
       this.getProductCateList();
       this.getBrandList();
+   
     },
     computed:{
       //商品的编号
@@ -99,7 +100,7 @@
     },
     watch: {
       productId:function(newValue){
-        if(!this.isEdit)return;
+       
         if(this.hasEditCreated)return;
         if(newValue===undefined||newValue==null||newValue===0)return;
         this.handleEditCreated();
@@ -117,11 +118,13 @@
     methods: {
       //处理编辑逻辑
       handleEditCreated(){
+        this.selectProductCateValue = []
         if(this.value.productCategoryId!=null){
           this.selectProductCateValue.push(this.value.cateParentId);
           this.selectProductCateValue.push(this.value.productCategoryId);
         }
         this.hasEditCreated=true;
+        this.$forceUpdate()
       },
       getProductCateList() {
         fetchListWithChildren().then(response => {
@@ -149,10 +152,15 @@
       },
       getCateNameById(id){
         let name=null;
+       
         for(let i=0;i<this.productCateOptions.length;i++){
-          for(let j=0;i<this.productCateOptions[i].children.length;j++){
-            if(this.productCateOptions[i].children[j].value===id){
-              name=this.productCateOptions[i].children[j].label;
+      
+          for(let j=0;j<this.productCateOptions[i].children.length;j++){
+
+            let temption = this.productCateOptions[i].children[j];
+            if(temption && temption.value===id){
+        
+              name=temption.label;
               return name;
             }
           }

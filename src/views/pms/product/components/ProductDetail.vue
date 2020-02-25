@@ -1,6 +1,11 @@
 <template> 
  <div class="app-container">
+
   <el-card >
+         <el-button-group style="float: right;margin: 4px">
+  <el-button type="primary" size="medium" @click="handleFinishCommit">保存</el-button>
+  <el-button type="primary" size="medium" @click="handleScanProduct">预览</el-button>
+  </el-button-group>
   
     <el-tabs tab-position="left">
     <el-tab-pane label="填写商品信息">  
@@ -45,18 +50,23 @@
     </product-relation-detail>
     </el-tab-pane>
 
-    <el-tab-pane label="商品预览" v-if="isEdit">
+    <!-- <el-tab-pane label="商品预览" v-if="isEdit">
     <product-scan v-model="this.$route.query.id">
     </product-scan>
-    </el-tab-pane>
+    </el-tab-pane> -->
 
 
   </el-tabs>
-  <el-button-group>
-  <el-button type="primary" size="medium" @click="handleFinishCommit">保存</el-button>
-   </el-button-group>
+
   
   </el-card>
+   <el-dialog
+      title="预览商品信息"
+      :visible.sync="dialogVisible"
+      width="40%">
+      <product-scan v-model="this.$route.query.id">
+    </product-scan>
+  </el-dialog>
  </div>
 </template>
 <script>
@@ -131,6 +141,8 @@
     verifyStatus: 0,
     weight: 0,
     ownerid: 0,
+
+    
   };
   export default {
     name: 'ProductDetail',
@@ -145,7 +157,8 @@
       return {
         active: 0,
         productParam: Object.assign({}, defaultProductParam),
-        showStatus: [true, false, false, false]
+        showStatus: [true, false, false, false],
+        dialogVisible: false
       }
     },
     created(){
@@ -176,7 +189,7 @@
         }
       },
       handleFinishCommit(isEdit) {
-        this.$confirm('是否要提交该产品', '提示', {
+        this.$confirm('是否要提交该产品,提交后商品将下架，等审核后才可以上架', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -194,13 +207,18 @@
             createProduct(this.productParam).then(response=>{
               this.$message({
                 type: 'success',
-                message: '提交成功',
+                message: '提交成功'+JSON.stringify(response),
                 duration:1000
               });
-              location.reload();
+              alert(JSON.stringify(response.data))
+              this.$router.push({path:'/pms/updateProduct',query:{id:response.data.id}});
             });
           }
         })
+      },
+      handleScanProduct(){
+       
+        this.dialogVisible = true;
       }
     }
   }

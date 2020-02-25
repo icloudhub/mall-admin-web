@@ -9,7 +9,14 @@
                 <el-input v-model="editdata.platform"></el-input> 
               </el-form-item>
               <el-form-item label="状态">
-                <el-input v-model="editdata.status"></el-input> 
+                <el-select v-model="editdata.status" placeholder="请选择">
+                <el-option
+                    v-for="item in statusOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
               </el-form-item>
               <el-form-item label="描述信息">
                 <el-input v-model="editdata.remark"></el-input> 
@@ -19,6 +26,24 @@
 </template>
 <script>
 export default {
-    props: ['editdata']
+    props: ['editdata'],
+    data() {
+    return {
+     
+      statusOptions: [{
+          value: 0,
+          label: '待上传'
+        }, {
+          value: 1,
+          label: '待上架'
+        }, {
+          value: 2,
+          label: '已上架'
+        }, {
+          value: 3,
+          label: '已下架'
+        }]
+    };
+  },
 }
 </script>
