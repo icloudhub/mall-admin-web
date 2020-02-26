@@ -14,10 +14,14 @@
     </el-tab-pane>
 
     <el-tab-pane label="会员积分详情">
+      <UserIntegrationHistory :userId = "this.$route.query.id">
+      </UserIntegrationHistory>
 
     </el-tab-pane>
 
     <el-tab-pane label="会员登陆日志">
+       <UserLoginLog :userId = "this.$route.query.id">
+      </UserLoginLog>
 
     </el-tab-pane>
 
@@ -28,10 +32,13 @@
 </template>
 <script>
   import UserInfo from './components/UserInfo';
+  import UserIntegrationHistory from './components/UserIntegrationHistory';
+  import UserLoginLog from './components/UserLoginLog';
+  
  
   export default {
     name: 'UserDetal',
-    components: {UserInfo},
+    components: {UserInfo, UserIntegrationHistory,UserLoginLog},
     props: {
      
     },

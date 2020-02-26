@@ -200,6 +200,33 @@ export function userinfo(id){
   })
 }
 
+/**
+ * 获取会员积分列表
+ */
+export function integrationHistory(id,pageSize,pageNum){
+  return request({
+    url:'/integration/history/'+id,
+    method:'get',
+    params:{
+      pageSize:pageSize,
+      pageNum:pageNum
+  }
+  })
+}
+/**
+ * 获取会员登陆日志
+ */
+export function loginLog(id,pageSize,pageNum){
+  return request({
+    url:'/member/loginLog/'+id,
+    method:'get',
+    params:{
+      pageSize:pageSize,
+      pageNum:pageNum
+  }
+  })
+}
+
 
 
 

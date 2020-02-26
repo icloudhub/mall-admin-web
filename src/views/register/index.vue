@@ -9,7 +9,7 @@
         <div style="text-align: center">
           <svg-icon icon-class="login-mall" style="width: 56px;height: 56px;color: #409EF"></svg-icon>
         </div>
-        <h2 class="login-title color-main">后台管理系统</h2>
+        <h2 class="login-title color-main">管理员注册</h2>
         <el-form-item prop="username">
           <el-input name="username"
                     type="text"
@@ -36,15 +36,9 @@
           </span>
           </el-input>
         </el-form-item>
-        <el-form-item style="margin-bottom: 8px">
+        <el-form-item style="margin-bottom: 60px">
           <el-button style="width: 100%" type="primary" :loading="loading" @click.native.prevent="handleLogin">
             登录
-          </el-button>
-      
-        </el-form-item>
-         <el-form-item style="margin-bottom: 60px">
-          <el-button style="width: 100%" type="primary" @click.native.prevent="handleRegist">
-            注册
           </el-button>
         </el-form-item>
       </el-form>
@@ -77,8 +71,8 @@
       };
       return {
         loginForm: {
-          username: 'admin',
-          password: '123456',
+          username: '',
+          password: '',
         },
         loginRules: {
           username: [{required: true, trigger: 'blur', validator: validateUsername}],
@@ -113,9 +107,6 @@
             return false
           }
         })
-      },
-      handleRegist(){
-        this.$router.push({path: '/register'})
       }
     }
   }
