@@ -6,9 +6,6 @@
                :rules="loginRules"
                ref="loginForm"
                label-position="left">
-        <div style="text-align: center">
-          <svg-icon icon-class="login-mall" style="width: 56px;height: 56px;color: #409EF"></svg-icon>
-        </div>
         <h2 class="login-title color-main">管理员注册</h2>
         <el-form-item prop="username">
           <el-input name="username"
@@ -18,6 +15,32 @@
                     placeholder="请输入用户名">
           <span slot="prefix">
             <svg-icon icon-class="user" class="color-main"></svg-icon>
+          </span>
+          </el-input>
+        </el-form-item>
+        <el-form-item prop="phone">
+          <el-input name="phone"
+                    type="text"
+                    v-model="loginForm.phone"
+                    autoComplete="on"
+                    placeholder="手机号码">
+          <span slot="prefix">
+            <svg-icon icon-class="user" class="color-main"></svg-icon>
+          </span>
+          
+          </el-input>
+        </el-form-item>
+               <el-form-item prop="authCode">
+          <el-input name="authCode"
+                    type="text"
+                    v-model="loginForm.authCode"
+                    autoComplete="on"
+                    placeholder="验证码">
+          <span slot="prefix">
+            <svg-icon icon-class="user" class="color-main"></svg-icon>
+          </span>
+           <span slot="suffix" @click="handleGetAuthCode">
+            <el-button size="small" type="primary" >获取验证码</el-button>
           </span>
           </el-input>
         </el-form-item>
@@ -37,7 +60,7 @@
           </el-input>
         </el-form-item>
         <el-form-item style="margin-bottom: 60px">
-          <el-button style="width: 100%" type="primary" :loading="loading" @click.native.prevent="handleLogin">
+          <el-button style="width: 100%" type="primary" :loading="loading" @click.native.prevent="handleRegister">
             登录
           </el-button>
         </el-form-item>
@@ -48,12 +71,12 @@
 </template>
 
 <script>
-  import {isvalidUsername} from '@/utils/validate';
+  import {isvalidUsername, isvalidPhone, isvalidAuthCode} from '@/utils/validate';
   import {setSupport,getSupport,SupportUrl} from '@/utils/support';
   import login_center_bg from '@/assets/images/login_center_bg.png'
-
+  import {register} from '@/api/register';
   export default {
-    name: 'login',
+    name: 'register',
     data() {
       const validateUsername = (rule, value, callback) => {
         if (!isvalidUsername(value)) {
@@ -69,14 +92,33 @@
           callback()
         }
       };
+      const validatePhone = (rule, value, callback) => {
+        if (!isvalidPhone(value)) {
+          callback(new Error('请输入正确的手机号码'))
+        } else {
+          callback()
+        }
+      };
+      const validateAuthCode = (rule, value, callback) => {
+        if (!isvalidAuthCode(value)) {
+          callback(new Error('请输入正确的验证吗'))
+        } else {
+          callback()
+        }
+      };
+      
       return {
         loginForm: {
           username: '',
           password: '',
+          phone:'',
+          authCode:''
         },
         loginRules: {
           username: [{required: true, trigger: 'blur', validator: validateUsername}],
-          password: [{required: true, trigger: 'blur', validator: validatePass}]
+          password: [{required: true, trigger: 'blur', validator: validatePass}],
+          phone: [{required: true, trigger: 'blur', validator: validatePhone}],
+          authCode: [{required: true, trigger: 'blur', validator: validateAuthCode}]
         },
         loading: false,
         pwdType: 'password',
@@ -91,22 +133,13 @@
           this.pwdType = 'password'
         }
       },
-      handleLogin() {
-        this.$refs.loginForm.validate(valid => {
-          if (valid) {
-           
-            this.loading = true;
-            this.$store.dispatch('Login', this.loginForm).then(() => {
-              this.loading = false;
-              this.$router.push({path: '/'})
-            }).catch(() => {
-              this.loading = false
-            })
-          } else {
-            console.log('参数验证不合法！');
-            return false
+      handleRegister() {
+        
+      },
+      handleGetAuthCode(){
+          if(this.loginForm.phone.length<11){
+              alert("手机号码不能为空");
           }
-        })
       }
     }
   }
@@ -117,9 +150,8 @@
     position: absolute;
     left: 0;
     right: 0;
-    width: 360px;
+    width: 320px;
     margin: 140px auto;
-    border-top: 10px solid #409EFF;
   }
 
   .login-title {

@@ -1,13 +1,14 @@
 
 import request from '@/utils/request'
-export function userlist(name,pageSize,pageNum) {
+
+export function userlist(name, pageSize, pageNum) {
   return request({
-    url:'/admin/list',
-    method:'get',
-    params:{
-        name:name,
-        pageSize:pageSize,
-        pageNum:pageNum
+    url: '/admin/list',
+    method: 'get',
+    params: {
+      name: name,
+      pageSize: pageSize,
+      pageNum: pageNum
     }
   })
 }
@@ -15,14 +16,14 @@ export function userlist(name,pageSize,pageNum) {
 /**
  * 获取用户列表
  */
-export function memberlist(name,pageSize,pageNum) {
+export function memberlist(name, pageSize, pageNum) {
   return request({
-    url:'/member/list',
-    method:'get',
-    params:{
-        name:name,
-        pageSize:pageSize,
-        pageNum:pageNum
+    url: '/member/list',
+    method: 'get',
+    params: {
+      name: name,
+      pageSize: pageSize,
+      pageNum: pageNum
     }
   })
 }
@@ -30,11 +31,11 @@ export function memberlist(name,pageSize,pageNum) {
 /**
  * 获取所有权限列表
  */
-export function permissionlist(name,pageSize,pageNum) {
+export function permissionlist(name, pageSize, pageNum) {
   return request({
-    url:'/permission/treeList',
-    method:'get',
-    params:null
+    url: '/permission/treeList',
+    method: 'get',
+    params: null
   })
 }
 
@@ -43,9 +44,9 @@ export function permissionlist(name,pageSize,pageNum) {
  */
 export function rolelist() {
   return request({
-    url:'/role/list',
-    method:'get',
-    params:null
+    url: '/role/list',
+    method: 'get',
+    params: null
   })
 }
 
@@ -54,39 +55,39 @@ export function rolelist() {
  */
 export function adminrole(id) {
   return request({
-    url:'/admin/role/'+id,
-    method:'get',
-    params:null
+    url: '/admin/role/' + id,
+    method: 'get',
+    params: null
   })
 }
 /**
   * 修改指定用户的角色
  */
-export function adminroleUpdate(adminid,rokeids) {
+export function adminroleUpdate(adminid, rokeids) {
   let data = new FormData();
   let params = {
-    adminId:adminid,
-    roleIds:rokeids
-  } 
+    adminId: adminid,
+    roleIds: rokeids
+  }
   Object.keys(params).forEach((key) => {
     data.append(key, params[key]);
   });
 
   return request({
-    url:'/admin/role/update',
-    method:'post',
-    data:data
+    url: '/admin/role/update',
+    method: 'post',
+    data: data
   })
 }
 
 /**
  * 根据id批量删除权限）
   */
- export function permissioncreate(data) {
+export function permissioncreate(data) {
   return request({
-    url:'/permission/create',
-    method:'post',
-    data:data
+    url: '/permission/create',
+    method: 'post',
+    data: data
   })
 }
 
@@ -95,37 +96,36 @@ export function adminroleUpdate(adminid,rokeids) {
   */
 export function adminpermission(id) {
   return request({
-    url:'/admin/permission/'+id,
-    method:'get',
-    params:null
+    url: '/admin/permission/' + id,
+    method: 'get',
+    params: null
   })
 }
 /**
  * 根据id批量删除权限）
   */
- export function permissiondelete(id) {
+export function permissiondelete(id) {
 
   let data = new FormData();
   data.append("ids", id);
   return request({
-    url:'/permission/delete/',
-    method:'post',
-    data:data
+    url: '/permission/delete/',
+    method: 'post',
+    data: data
   })
 }
 
 /**
  * 根据id批量删除权限）
   */
- export function permissionupdate(id, data) {
+export function permissionupdate(id, data) {
 
   return request({
-    url:'/permission/update/'+id,
-    method:'post',
-    data:data
+    url: '/permission/update/' + id,
+    method: 'post',
+    data: data
   })
 }
-
 
 
 /**
@@ -134,9 +134,9 @@ export function adminpermission(id) {
  */
 export function rolecreate(data) {
   return request({
-    url:'/role/create',
-    method:'post',
-    data:data
+    url: '/role/create',
+    method: 'post',
+    data: data
   })
 }
 
@@ -146,8 +146,8 @@ export function rolecreate(data) {
  */
 export function roledelete(data) {
   return request({
-    url:'/role/delete?ids='+data,
-    method:'post',
+    url: '/role/delete?ids=' + data,
+    method: 'post',
     // data:data
   })
 }
@@ -156,12 +156,12 @@ export function roledelete(data) {
  * POST /role/update
   * 修改角色
  */
-export function roleupdate(id,data) {
- 
+export function roleupdate(id, data) {
+
   return request({
-    url:'/role/update/'+id,
-    method:'post',
-    data:data
+    url: '/role/update/' + id,
+    method: 'post',
+    data: data
   })
 }
 /**
@@ -169,10 +169,10 @@ export function roleupdate(id,data) {
   * 获取相应角色权限
  */
 export function rolepermission(id) {
- 
+
   return request({
-    url:'/role/permission/'+id,
-    method:'get',
+    url: '/role/permission/' + id,
+    method: 'get',
   })
 }
 
@@ -181,11 +181,11 @@ export function rolepermission(id) {
   * 修改角色
  */
 export function rolepermissionupdate(data) {
- 
+
   return request({
-    url:'/role/permission/update/',
-    method:'post',
-    data:data
+    url: '/role/permission/update/',
+    method: 'post',
+    data: data
   })
 }
 
@@ -193,37 +193,47 @@ export function rolepermissionupdate(data) {
 /**
  * 获取会员信息
  */
-export function userinfo(id){
+export function userinfo(id) {
   return request({
-    url:'/member/userinfo/'+id,
-    method:'get',
+    url: '/member/userinfo/' + id,
+    method: 'get',
   })
 }
 
 /**
  * 获取会员积分列表
  */
-export function integrationHistory(id,pageSize,pageNum){
+export function integrationHistory(id, pageSize, pageNum) {
   return request({
-    url:'/integration/history/'+id,
-    method:'get',
-    params:{
-      pageSize:pageSize,
-      pageNum:pageNum
-  }
+    url: '/integration/history/' + id,
+    method: 'get',
+    params: {
+      pageSize: pageSize,
+      pageNum: pageNum
+    }
   })
 }
 /**
  * 获取会员登陆日志
  */
-export function loginLog(id,pageSize,pageNum){
+export function loginLog(id, pageSize, pageNum) {
   return request({
-    url:'/member/loginLog/'+id,
-    method:'get',
-    params:{
-      pageSize:pageSize,
-      pageNum:pageNum
-  }
+    url: '/member/loginLog/' + id,
+    method: 'get',
+    params: {
+      pageSize: pageSize,
+      pageNum: pageNum
+    }
+  })
+}
+
+export function testdev() {
+  return request({
+    url: '/api/test',
+    method: 'get',
+    params: {
+      code: 1,
+    }
   })
 }
 

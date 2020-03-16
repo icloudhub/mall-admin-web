@@ -7,7 +7,7 @@
                ref="loginForm"
                label-position="left">
         <div style="text-align: center">
-          <svg-icon icon-class="login-mall" style="width: 56px;height: 56px;color: #409EF"></svg-icon>
+         <h2 class="login-title color-main">生活宝</h2>
         </div>
         <h2 class="login-title color-main">后台管理系统</h2>
         <el-form-item prop="username">
@@ -57,6 +57,9 @@
   import {isvalidUsername} from '@/utils/validate';
   import {setSupport,getSupport,SupportUrl} from '@/utils/support';
   import login_center_bg from '@/assets/images/login_center_bg.png'
+  import img_logo from "@/assets/images/logo_1024.png";
+  import { testdev } from '@/api/user'
+
 
   export default {
     name: 'login',
@@ -86,7 +89,8 @@
         },
         loading: false,
         pwdType: 'password',
-        login_center_bg
+        login_center_bg,
+        img_logo
       }
     },
     methods: {
@@ -98,6 +102,12 @@
         }
       },
       handleLogin() {
+        testdev().then(response => {
+          alert("111")
+        }).then(()=>{
+          alert("333")
+        });
+        return
         this.$refs.loginForm.validate(valid => {
           if (valid) {
            
@@ -128,7 +138,6 @@
     right: 0;
     width: 360px;
     margin: 140px auto;
-    border-top: 10px solid #409EFF;
   }
 
   .login-title {

@@ -1,6 +1,32 @@
+// 用户名
 export function isvalidUsername(str) {
-  const valid_map = ['admin', 'test']
-  return valid_map.indexOf(str.trim()) >= 0
+  if(str.length<=0){
+    return false;
+  }
+  if(str.length>16){
+    return false;
+  }
+  const reg = /^[0-9A-Za-z]+$/
+  return reg.test(str)
+}
+
+// 手机号
+export function isvalidPhone(str) {
+  if(str.length!=11){
+    return false;
+  }
+  const reg = /^[0-9]+$/
+  return reg.test(str)
+}
+
+
+// 验证码
+export function isvalidAuthCode(str) {
+  if(str.length!=6 && str.length!=4){
+    return false;
+  }
+  const reg = /^[0-9]+$/
+  return reg.test(str)
 }
 
 /* 合法uri*/
