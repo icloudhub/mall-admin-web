@@ -102,12 +102,7 @@
         }
       },
       handleLogin() {
-        testdev().then(response => {
-          alert("111")
-        }).then(()=>{
-          alert("333")
-        });
-        return
+ 
         this.$refs.loginForm.validate(valid => {
           if (valid) {
            

@@ -32,3 +32,12 @@ export function register(data) {
     data:data
   })
 }
+
+export function getAuthCode(phone) {
+  return request({
+    url: '/admin/getAuthCode',
+    method: 'get',
+    params:{"phone":phone}
+  })
+}
+
