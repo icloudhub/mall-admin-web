@@ -10,6 +10,7 @@ import cfgrouter from './cfg'
 import stationrouter from './station'
 import subjectrouter from './subject'
 import testrouter from './test'
+import clientrouter from './client'
 
 
 
@@ -29,6 +30,7 @@ export const constantRouterMap = [
   {path: '/register', component: () => import('@/views/login/register'), hidden: true},
   {path: '/login', component: () => import('@/views/login/index'), hidden: true},
   {path: '/404', component: () => import('@/views/404'), hidden: true},
+  clientrouter,
   {
     path: '',
     component: Layout,
