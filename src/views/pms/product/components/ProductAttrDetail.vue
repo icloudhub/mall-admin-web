@@ -5,10 +5,6 @@
       <el-form-item label="商品相册：">
         <multi-upload v-model="selectProductPics"></multi-upload>
       </el-form-item>
-
-      <!-- <el-form-item label="商品相册：">
-        <scoped-upload v-model="selectProductPics"></scoped-upload>
-      </el-form-item> -->
      
     </el-form>
   </div>
