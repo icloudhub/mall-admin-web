@@ -10,7 +10,7 @@ import cfgrouter from './cfg'
 import stationrouter from './station'
 import subjectrouter from './subject'
 import testrouter from './test'
-import clientrouter from './client'
+import finrouter from './fin'
 
 
 
@@ -30,7 +30,7 @@ export const constantRouterMap = [
   {path: '/register', component: () => import('@/views/login/register'), hidden: true},
   {path: '/login', component: () => import('@/views/login/index'), hidden: true},
   {path: '/404', component: () => import('@/views/404'), hidden: true},
-  clientrouter,
+
   {
     path: '',
     component: Layout,
@@ -46,7 +46,6 @@ export const constantRouterMap = [
   cfgrouter,
   stationrouter,
   subjectrouter,
-  
   {
     path: '/pms',
     component: Layout,
@@ -159,7 +158,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/oms/order',
     name: 'oms',
-    meta: {title: '订单', icon: 'order'},
+    meta: {title: '订单', icon: 'el-icon-setting'},
     children: [
       {
         path: 'order',
@@ -220,7 +219,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/sms/coupon',
     name: 'sms',
-    meta: {title: '营销', icon: 'sms'},
+    meta: {title: '营销', icon: 'el-icon-setting'},
     children: [
       {
         path: 'flash',
@@ -322,6 +321,7 @@ export const constantRouterMap = [
       }
     ]
   },
+  finrouter,
   testrouter,
   {path: '*', redirect: '/404', hidden: true}
 ]
