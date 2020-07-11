@@ -53,14 +53,15 @@
                 <span>{{scope.row.id}}</span>
               </template>
             </el-table-column>
-            <el-table-column label="名称" align="center">
+            <el-table-column label="自提点名称" align="center">
               <template slot-scope="scope">
                 <span>{{scope.row.name}}</span>
               </template>
             </el-table-column>
             <el-table-column label="会员账号" align="center">
+              
               <template slot-scope="scope">
-                <span>{{scope.row.memberId}}</span>
+                <el-button type="text" @click="handleSacnUserinfo(scope.row.memberId)" >{{scope.row.memberId}}</el-button>
               </template>
             </el-table-column>
             <el-table-column label="电话号码" align="center">
@@ -193,7 +194,10 @@ data() {
       clearseardata(){
         this.searchdata = {}
         this.getlist()
-      }
+      },
+        handleSacnUserinfo(row){
+          this.$router.push({path:'/user/userDetal',query:{id:row}});
+        },
   }
 }
 </script>

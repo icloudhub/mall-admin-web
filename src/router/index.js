@@ -11,6 +11,7 @@ import stationrouter from './station'
 import subjectrouter from './subject'
 import testrouter from './test'
 import finrouter from './fin'
+import storerouter from './store'
 
 
 
@@ -46,6 +47,7 @@ export const constantRouterMap = [
   cfgrouter,
   stationrouter,
   subjectrouter,
+  storerouter,
   {
     path: '/pms',
     component: Layout,
